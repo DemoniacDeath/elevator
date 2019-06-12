@@ -2,37 +2,114 @@ package com.example.elevator;
 
 import com.example.elevator.buttons.ControlPanel;
 import com.example.elevator.tasks.ElevatorController;
+import lombok.extern.log4j.Log4j2;
 
+import java.util.HashSet;
 import java.util.Set;
 
-public interface Elevator {
+@Log4j2
+public class Elevator {
+    private final Building building;
+    private final Set<Person> peopleInside = new HashSet<>();
+    private final ControlPanel controlPanel;
 
-    void moveOneFloor(Direction direction);
+    private int currentFloor = 1;
+    private boolean stopped = false;
+    private boolean doorsOpen = false;
+    private ElevatorController elevatorController;
 
-    int getCurrentFloor();
+    Elevator(Building building, ControlPanel controlPanel) {
+        this.building = building;
+        this.controlPanel = controlPanel;
+    }
 
-    Set<Person> getPeopleInside();
+    public void moveOneFloor(Direction direction) {
+        if (doorsOpen) {
+            throw new ElevatorException("Cannot move elevator while doors are open");
+        }
+        if (stopped) {
+            throw new ElevatorException("Cannot move elevator while it's stopped");
+        }
+        switch(direction) {
+            case UP:
+                if (currentFloor == building.getNumberOfFloors()) {
+                    throw new ElevatorException("Cannot move elevator up from the last floor");
+                }
+                this.currentFloor++;
+                log.info("Moving up one floor");
+                break;
+            case DOWN:
+                if (currentFloor == 1) {
+                    throw new ElevatorException("Cannot move down from the first floor");
+                }
+                this.currentFloor--;
+                log.info("Moving down one floor");
+                break;
+        }
+    }
 
-    void enter(Person person);
+    void enter(Person person) {
+        if (!doorsOpen) {
+            throw new ElevatorException("Cannot allow a person to enter when doors are closed");
+        }
+        peopleInside.add(person);
+        log.info("Person entered on floor #" + currentFloor);
+    }
 
-    void leave(Person person);
+    void leave(Person person) {
+        if (!doorsOpen) {
+            throw new ElevatorException("Cannot allow a person to leave when doors are closed");
+        }
+        if (!peopleInside.remove(person)) {
+            throw new ElevatorException("Cannot make a person leave if the person is not inside elevator");
+        }
+        log.info("Person left on floor #" + currentFloor);
+    }
 
-    ControlPanel getControlPanel();
+    public void closeDoors() {
+        doorsOpen = false;
+        log.info("Doors closed on floor #" + currentFloor);
+    }
 
-    Building getBuilding();
+    public void openDoors() {
+        doorsOpen = true;
+        log.info("Doors opened on floor #" + currentFloor);
+    }
 
-    void stop();
+    public void stop() {
+        stopped = !stopped;
+        log.info("Stop command was received");
+    }
 
-    void openDoors();
+    Set<Person> getPeopleInside() {
+        return peopleInside;
+    }
 
-    void closeDoors();
+    public int getCurrentFloor() {
+        return currentFloor;
+    }
 
-    boolean isStopped();
+    ControlPanel getControlPanel() {
+        return controlPanel;
+    }
 
-    boolean areDoorsOpen();
+    public Building getBuilding() {
+        return building;
+    }
 
-    void setElevatorController(ElevatorController elevatorController);
+    boolean isStopped() {
+        return stopped;
+    }
 
-    ElevatorController getElevatorController();
+    boolean areDoorsOpen() {
+        return doorsOpen;
+    }
 
+    public void setElevatorController(ElevatorController elevatorController) {
+        this.elevatorController = elevatorController;
+    }
+
+    ElevatorController getElevatorController() {
+        return elevatorController;
+    }
 }

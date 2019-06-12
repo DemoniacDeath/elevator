@@ -1,5 +1,6 @@
 package com.example.elevator.buttons;
 
 public interface Button {
-    void press(Runnable then);
+    void press();
+    void pressAnd(Runnable then);
 }

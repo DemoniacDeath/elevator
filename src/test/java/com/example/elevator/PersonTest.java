@@ -14,7 +14,7 @@ class PersonTest {
     Elevator elevator;
 
     @Test void shouldEnterAndExitElevator() {
-        Person person = new PersonImpl(1,1);
+        Person person = new Person(1,1);
         person.enter(elevator);
         verify(elevator, times(1)).enter(person);
         when(elevator.getCurrentFloor()).thenReturn(3);

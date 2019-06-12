@@ -7,11 +7,16 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ElevatorCallButton extends AbstractElevatorButton {
-    int floor;
-    Direction direction;
-    ElevatorController elevatorController;
+    private final int floor;
+    private final Direction direction;
+    private final ElevatorController elevatorController;
 
-    public void press(Runnable then) {
+    @Override
+    public void press() {
+        elevatorController.addTask(new CallTask(floor, direction));
+    }
+
+    public void pressAnd(Runnable then) {
         elevatorController.addTask(new CallTask(floor, direction, then));
     }
 }

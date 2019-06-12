@@ -5,13 +5,15 @@ import com.example.elevator.Elevator;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class ElevatorControllerImpl implements ElevatorController {
-    private TaskQueue taskQueue = new TaskQueueImpl();
-    private Elevator elevator;
+public class ElevatorControllerDefaultImpl implements ElevatorController {
+    private final TaskQueue taskQueue = new TaskQueue();
+    private final Elevator elevator;
+    private final TaskRunnerStrategy taskRunnerStrategy;
 
-    public ElevatorControllerImpl(Elevator elevator) {
+    public ElevatorControllerDefaultImpl(Elevator elevator, TaskRunnerStrategy taskRunnerStrategy) {
         this.elevator = elevator;
         this.elevator.setElevatorController(this);
+        this.taskRunnerStrategy = taskRunnerStrategy;
     }
 
     public void addTask(Task task) {
@@ -24,17 +26,11 @@ public class ElevatorControllerImpl implements ElevatorController {
     }
 
     public void next() {
-        Task task = taskQueue.getNextTask();
-        if (task == null) {
-            throw new ElevatorControllerException("No tasks left to execute");
-        }
-        this.moveElevatorToFloor(task.getFloorNumber());
-        elevator.openDoors();
-        task.then().run();
-        elevator.closeDoors();
+        taskRunnerStrategy.run(this, taskQueue, elevator);
     }
 
-    private void moveElevatorToFloor(int floorNumber) {
+    @Override
+    public void moveElevatorToFloor(int floorNumber) {
         if (floorNumber < 1) {
             throw new ElevatorControllerException("Cannot go to floor number that is less than 1");
         }

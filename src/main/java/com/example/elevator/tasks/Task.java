@@ -1,6 +1,6 @@
 package com.example.elevator.tasks;
 
-public interface Task {
+interface Task {
     int getFloorNumber();
     Runnable then();
 }

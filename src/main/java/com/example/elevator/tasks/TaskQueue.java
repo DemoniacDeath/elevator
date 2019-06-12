@@ -1,9 +1,19 @@
 package com.example.elevator.tasks;
 
-public interface TaskQueue {
-    void addTask(Task task);
+import java.util.LinkedList;
+import java.util.Queue;
 
-    boolean hasNextTask();
+class TaskQueue {
+    private final Queue<Task> tasks = new LinkedList<>();
+    void addTask(Task task) {
+        tasks.add(task);
+    }
 
-    Task getNextTask();
+    boolean hasNextTask() {
+        return tasks.peek() != null;
+    }
+
+    Task getNextTask() {
+        return tasks.poll();
+    }
 }

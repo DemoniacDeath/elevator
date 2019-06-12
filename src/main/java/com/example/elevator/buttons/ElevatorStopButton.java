@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ElevatorStopButton extends AbstractElevatorButton {
-    public void press(Runnable then) {
+    public void press() {
         this.elevator.stop();
     }
 }

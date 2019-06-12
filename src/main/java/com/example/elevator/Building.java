@@ -1,9 +1,19 @@
 package com.example.elevator;
 
 import com.example.elevator.buttons.CallPanel;
+import lombok.AllArgsConstructor;
 
-public interface Building {
-    int getNumberOfFloors();
+import java.util.Map;
 
-    CallPanel getCallPanelForFloor(int floor);
+@AllArgsConstructor
+public class Building {
+    private Map<Integer, CallPanel> floorCallPanels;
+
+    public int getNumberOfFloors() {
+        return floorCallPanels.size();
+    }
+
+    CallPanel getCallPanelForFloor(int floor) {
+        return floorCallPanels.get(floor);
+    }
 }
