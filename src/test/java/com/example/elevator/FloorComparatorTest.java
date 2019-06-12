@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class FloorComparatorTest {
     @Test
     void shouldReturnCorrectDirectionOrNull() {
-        assertEquals(Direction.UP, Direction.FloorComparator.compareFloors(1, 2));
-        assertEquals(Direction.DOWN, Direction.FloorComparator.compareFloors(2, 1));
-        assertNull(Direction.FloorComparator.compareFloors(1, 1));
+        assertEquals(Direction.UP, Direction.compareFloors(1, 2));
+        assertEquals(Direction.DOWN, Direction.compareFloors(2, 1));
+        assertNull(Direction.compareFloors(1, 1));
     }
 }

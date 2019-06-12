@@ -38,7 +38,7 @@ public class ElevatorControllerDefaultImpl implements ElevatorController {
             throw new ElevatorControllerException("Cannot go to floor number that is more than number of floors in the building");
         }
         while (elevator.getCurrentFloor() != floorNumber) {
-            elevator.moveOneFloor(Direction.FloorComparator.compareFloors(elevator.getCurrentFloor(), floorNumber));
+            elevator.moveOneFloor(Direction.compareFloors(elevator.getCurrentFloor(), floorNumber));
         }
     }
 }

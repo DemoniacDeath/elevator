@@ -9,6 +9,8 @@ import java.util.Set;
 
 @Log4j2
 public class Elevator {
+    private final int height;
+    private final int speed;
     private final Building building;
     private final Set<Person> peopleInside = new HashSet<>();
     private final ControlPanel controlPanel;
@@ -18,9 +20,11 @@ public class Elevator {
     private boolean doorsOpen = false;
     private ElevatorController elevatorController;
 
-    Elevator(Building building, ControlPanel controlPanel) {
+    Elevator(Building building, ControlPanel controlPanel, int height, int speed) {
         this.building = building;
         this.controlPanel = controlPanel;
+        this.height = height;
+        this.speed = speed;
     }
 
     public void moveOneFloor(Direction direction) {
@@ -36,16 +40,20 @@ public class Elevator {
                     throw new ElevatorException("Cannot move elevator up from the last floor");
                 }
                 this.currentFloor++;
-                log.info("Moving up one floor");
+                log.info("Moving up one floor in " + calculateOnFloorMoveTime() + "s");
                 break;
             case DOWN:
                 if (currentFloor == 1) {
                     throw new ElevatorException("Cannot move down from the first floor");
                 }
                 this.currentFloor--;
-                log.info("Moving down one floor");
+                log.info("Moving down one floor in " + calculateOnFloorMoveTime() + "s");
                 break;
         }
+    }
+
+    private int calculateOnFloorMoveTime() {
+        return this.height * this.speed;
     }
 
     void enter(Person person) {

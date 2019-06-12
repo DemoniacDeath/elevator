@@ -4,7 +4,7 @@ import com.example.elevator.buttons.Button;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-import static com.example.elevator.Direction.FloorComparator.compareFloors;
+import static com.example.elevator.Direction.compareFloors;
 
 @AllArgsConstructor
 @Log4j2

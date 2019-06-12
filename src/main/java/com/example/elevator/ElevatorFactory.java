@@ -18,7 +18,7 @@ class ElevatorFactory {
         Building building = new Building(floorCallButtons);
         ElevatorStopButton stopButton = new ElevatorStopButton();
         ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
-        Elevator elevator = new Elevator(building, controlPanel);
+        Elevator elevator = new Elevator(building, controlPanel, 4, 1);
         ElevatorController elevatorController = new ElevatorControllerDefaultImpl(elevator, new DefaultTaskRunnerStrategy());
         for (int i = 1; i <= numberOfFloors; i++) {
             floorButtons.put(i, new ElevatorFloorButton(i, elevatorController));

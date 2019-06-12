@@ -15,15 +15,13 @@ public enum Direction {
         return "UNKNOWN DIRECTION";
     }
 
-    public static class FloorComparator {
-        public static Direction compareFloors(int fromFloor, int toFloor) {
-            if (fromFloor < toFloor) {
-                return Direction.UP;
-            } else if (fromFloor > toFloor) {
-                return Direction.DOWN;
-            } else {
-                return null;
-            }
+    public static Direction compareFloors(int fromFloor, int toFloor) {
+        if (fromFloor < toFloor) {
+            return Direction.UP;
+        } else if (fromFloor > toFloor) {
+            return Direction.DOWN;
+        } else {
+            return null;
         }
     }
 }
