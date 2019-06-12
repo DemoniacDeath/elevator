@@ -52,13 +52,21 @@ public class ElevatorImpl implements Elevator {
 
     @Override
     public void enter(Person person) {
+        if (!doorsOpen) {
+            throw new ElevatorException("Cannot allow a person to enter when doors are closed");
+        }
         peopleInside.add(person);
         log.info("Person entered at floor " + currentFloor);
     }
 
     @Override
     public void leave(Person person) {
-        peopleInside.remove(person);
+        if (!doorsOpen) {
+            throw new ElevatorException("Cannot allow a person to leave when doors are closed");
+        }
+        if (!peopleInside.remove(person)) {
+            throw new ElevatorException("Cannot make a person leave if the person is not inside elevator");
+        }
         log.info("Person left at floor " + currentFloor);
     }
 

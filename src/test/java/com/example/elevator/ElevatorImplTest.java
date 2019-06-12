@@ -13,10 +13,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ElevatorImplTest {
     @Mock
-    private Building building;
+    Building building;
 
     @Mock
-    private ControlPanel controlPanel;
+    ControlPanel controlPanel;
+
+    @Mock
+    Person person;
 
     //Happy paths
     @Test
@@ -60,12 +63,15 @@ class ElevatorImplTest {
     @Test
     void shouldAllowAPersonToEnterAndLeave() {
         Elevator elevator = new ElevatorImpl(this.building, this.controlPanel);
-        Person person = new PersonImpl(1, 1);
         assertTrue(elevator.getPeopleInside().isEmpty());
+        elevator.openDoors();
         elevator.enter(person);
+        elevator.closeDoors();
         assertEquals(1, elevator.getPeopleInside().size());
         assertTrue(elevator.getPeopleInside().contains(person));
+        elevator.openDoors();
         elevator.leave(person);
+        elevator.closeDoors();
         assertTrue(elevator.getPeopleInside().isEmpty());
     }
 
@@ -99,5 +105,21 @@ class ElevatorImplTest {
         Elevator elevator = new ElevatorImpl(this.building, this.controlPanel);
         elevator.openDoors();
         assertThrows(ElevatorException.class, () -> elevator.moveOneFloor(Direction.UP));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToMakePersonThatIsNotInTheElevatorToLeave() {
+        lenient().when(building.getNumberOfFloors()).thenReturn(2);
+        Elevator elevator = new ElevatorImpl(this.building, this.controlPanel);
+        elevator.openDoors();
+        assertThrows(ElevatorException.class, () -> elevator.leave(person));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToMakePersonEnterOrLeaveWithClosedDoors() {
+        lenient().when(building.getNumberOfFloors()).thenReturn(2);
+        Elevator elevator = new ElevatorImpl(this.building, this.controlPanel);
+        assertThrows(ElevatorException.class, () -> elevator.enter(person));
+        assertThrows(ElevatorException.class, () -> elevator.leave(person));
     }
 }
