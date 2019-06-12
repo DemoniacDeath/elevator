@@ -101,6 +101,11 @@ public class ElevatorImpl implements Elevator {
     }
 
     @Override
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    @Override
     public boolean areDoorsOpen() {
         return doorsOpen;
     }

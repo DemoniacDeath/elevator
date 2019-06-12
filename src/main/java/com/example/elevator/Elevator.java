@@ -27,9 +27,12 @@ public interface Elevator {
 
     void closeDoors();
 
+    boolean isStopped();
+
     boolean areDoorsOpen();
 
     void setElevatorController(ElevatorController elevatorController);
 
     ElevatorController getElevatorController();
+
 }
