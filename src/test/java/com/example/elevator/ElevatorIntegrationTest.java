@@ -3,6 +3,8 @@ package com.example.elevator;
 import com.example.elevator.tasks.ElevatorRunner;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class ElevatorIntegrationTest {
     private ElevatorFactory elevatorFactory = new ElevatorFactoryImpl();
 
@@ -18,5 +20,9 @@ class ElevatorIntegrationTest {
         person3.getToTheDesiredFloor(elevator);
 
         ElevatorRunner.run(elevator.getElevatorController());
+
+        assertEquals(4, person1.getCurrentFloor());
+        assertEquals(2, person2.getCurrentFloor());
+        assertEquals(1, person3.getCurrentFloor());
     }
 }

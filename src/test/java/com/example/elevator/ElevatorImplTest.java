@@ -1,12 +1,9 @@
 package com.example.elevator;
 
-import com.example.elevator.buttons.ControlPanel;
-import com.example.elevator.buttons.ControlPanelImpl;
-import com.example.elevator.buttons.ElevatorStopButton;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ElevatorImplTest {
     private ElevatorFactory elevatorFactory = new ElevatorFactoryImpl();
