@@ -9,6 +9,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Person {
     @Getter
+    private final String name;
+    @Getter
     private final int desiredFloorNumber;
     @Getter
     @Setter
@@ -17,9 +19,14 @@ public class Person {
     @Setter
     private Elevator elevator = null;
 
-    public static Person createPersonOnFloorWithDesiredFloor(Floor currentFloor, int desiredFloorNumber) {
-        Person person = new Person(desiredFloorNumber);
+    public static Person createPersonOnFloorWithDesiredFloor(String name, int desiredFloorNumber, Floor currentFloor) {
+        Person person = new Person(name, desiredFloorNumber);
         person.setCurrentFloor(currentFloor);
         return person;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

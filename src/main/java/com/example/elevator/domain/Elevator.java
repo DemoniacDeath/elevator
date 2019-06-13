@@ -73,7 +73,7 @@ public class Elevator {
         peopleInside.add(person);
         person.setCurrentFloor(null);
         person.setElevator(this);
-        log.info("Person entered on " + currentFloor.toString());
+        log.info(person + " entered on " + currentFloor.toString());
     }
 
     public void leave(Person person) {
@@ -85,7 +85,7 @@ public class Elevator {
         }
         person.setCurrentFloor(currentFloor);
         person.setElevator(null);
-        log.info("Person left on " + currentFloor.toString());
+        log.info(person + " left on " + currentFloor.toString());
     }
 
     public void closeDoors() {

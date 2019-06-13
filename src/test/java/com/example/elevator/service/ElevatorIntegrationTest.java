@@ -17,9 +17,9 @@ class ElevatorIntegrationTest {
         Elevator elevator = building.getAvailableElevator();
         ElevatorController elevatorController = new ElevatorControllerDefaultImpl(elevator, new DefaultTaskRunnerStrategy());
         List<Person> people = Arrays.asList(
-                Person.createPersonOnFloorWithDesiredFloor(building.getFloor(1), 4),
-                Person.createPersonOnFloorWithDesiredFloor(building.getFloor(3), 2),
-                Person.createPersonOnFloorWithDesiredFloor(building.getFloor(4), 1)
+                Person.createPersonOnFloorWithDesiredFloor("Alice", 4, building.getFloor(1)),
+                Person.createPersonOnFloorWithDesiredFloor("Bob", 2, building.getFloor(3)),
+                Person.createPersonOnFloorWithDesiredFloor("Charlie", 1, building.getFloor(4))
         );
 
         CompositeProcessor compositeProcessor = new CompositeProcessor(elevatorController);
