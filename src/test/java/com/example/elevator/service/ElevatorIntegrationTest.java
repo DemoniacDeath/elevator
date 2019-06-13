@@ -3,6 +3,9 @@ package com.example.elevator.service;
 import com.example.elevator.domain.Building;
 import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.Person;
+import com.example.elevator.domain.tasks.OptimizedTaskQueue;
+import com.example.elevator.domain.tasks.SimpleTaskQueue;
+import com.example.elevator.domain.tasks.TaskQueue;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -11,11 +14,21 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorIntegrationTest {
+    private static final int numberOfFloors = 4;
     @Test
-    void testShouldMoveThreePeople() {
-        Building building = Building.createBuildingWith(4);
+    void testShouldMoveThreePeopleSimple() {
+        shouldMoveThreePeople(new SimpleTaskQueue());
+    }
+
+    @Test
+    void testShouldMoveThreePeopleOptimized() {
+        shouldMoveThreePeople(new OptimizedTaskQueue(numberOfFloors));
+    }
+
+    private void shouldMoveThreePeople(TaskQueue taskQueue) {
+        Building building = Building.createBuildingWith(numberOfFloors);
         Elevator elevator = building.getAvailableElevator();
-        ElevatorController elevatorController = new ElevatorControllerDefaultImpl(elevator, new DefaultTaskRunnerStrategy());
+        ElevatorController elevatorController = new ElevatorControllerDefaultImpl(taskQueue, elevator);
         List<Person> people = Arrays.asList(
                 Person.createPersonOnFloorWithDesiredFloor("Alice", 4, building.getFloor(1)),
                 Person.createPersonOnFloorWithDesiredFloor("Bob", 2, building.getFloor(3)),

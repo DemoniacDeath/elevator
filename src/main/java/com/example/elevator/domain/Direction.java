@@ -1,5 +1,8 @@
 package com.example.elevator.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum Direction {
     UP,
     DOWN;
@@ -23,5 +26,22 @@ public enum Direction {
         } else {
             return null;
         }
+    }
+
+    public static List<Integer> countFloorsFromCurrentInDirection(int currentFloor, Direction direction, int maximumFloors) {
+        List<Integer> floors = new ArrayList<>();
+        switch (direction) {
+            case UP:
+                for (int i = currentFloor; i <= maximumFloors; i++) {
+                    floors.add(i);
+                }
+                break;
+            case DOWN:
+                for (int i = currentFloor; i >= 1; i--) {
+                    floors.add(i);
+                }
+                break;
+        }
+        return floors;
     }
 }

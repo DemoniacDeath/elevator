@@ -11,10 +11,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequiredArgsConstructor
 public class ElevatorControllerDefaultImpl implements ElevatorController {
-    private final TaskQueue taskQueue = new TaskQueue();
+    private final TaskQueue taskQueue;
     @Getter
     private final Elevator elevator;
-    private final TaskRunnerStrategy taskRunnerStrategy;
 
     public void addTask(Task task) {
         taskQueue.addTask(task);
@@ -22,11 +21,20 @@ public class ElevatorControllerDefaultImpl implements ElevatorController {
     }
 
     public boolean canContinue() {
-        return taskQueue.hasNextTask();
+        return taskQueue.hasNextTaskFromCurrentFloor(elevator.getCurrentFloor().getFloorNumber());
     }
 
     public void process() {
-        taskRunnerStrategy.run(this, taskQueue, elevator);
+        elevator.closeDoors();
+        Task task = taskQueue.getNextTaskFromCurrentFloor(elevator.getCurrentFloor().getFloorNumber());
+        if (task == null) {
+            return;
+        }
+        moveElevatorToFloor(task.getFloorNumber());
+        elevator.openDoors();
+        elevator.getCurrentFloor().getCallPanel().getButtonForDirection(Direction.UP).depress();
+        elevator.getCurrentFloor().getCallPanel().getButtonForDirection(Direction.DOWN).depress();
+        elevator.getControlPanel().getFloorButton(elevator.getCurrentFloor().getFloorNumber()).depress();
     }
 
     @Override
