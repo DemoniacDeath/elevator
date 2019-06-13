@@ -44,4 +44,25 @@ public enum Direction {
         }
         return floors;
     }
+
+    public static List<Integer> countFloorsBetweenTwoFloors(int fromFloor, int toFloor) {
+        List<Integer> floors = new ArrayList<>();
+        Direction direction = compareFloors(fromFloor, toFloor);
+        if (direction == null) {
+            return floors;
+        }
+        switch (direction) {
+            case UP:
+                for (int i = fromFloor; i < toFloor; i++) {
+                    floors.add(i);
+                }
+                break;
+            case DOWN:
+                for (int i = fromFloor; i > toFloor; i--) {
+                    floors.add(i);
+                }
+                break;
+        }
+        return floors;
+    }
 }

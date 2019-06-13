@@ -10,11 +10,11 @@ public class SimpleTaskQueue implements TaskQueue {
         tasks.add(task);
     }
 
-    public boolean hasNextTaskFromCurrentFloor(int currentFloor) {
+    public boolean hasNextTaskForCurrentFloor(int currentFloor) {
         return tasks.peek() != null;
     }
 
-    public Task getNextTaskFromCurrentFloor(int currentFloor) {
+    public Task getNextTaskForCurrentFloor(int currentFloor) {
         return tasks.poll();
     }
 }

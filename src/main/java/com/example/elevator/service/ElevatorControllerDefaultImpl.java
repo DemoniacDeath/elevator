@@ -21,12 +21,13 @@ public class ElevatorControllerDefaultImpl implements ElevatorController {
     }
 
     public boolean canContinue() {
-        return taskQueue.hasNextTaskFromCurrentFloor(elevator.getCurrentFloor().getFloorNumber());
+        return taskQueue.hasNextTaskForCurrentFloor(elevator.getCurrentFloor().getFloorNumber());
     }
 
     public void process() {
         elevator.closeDoors();
-        Task task = taskQueue.getNextTaskFromCurrentFloor(elevator.getCurrentFloor().getFloorNumber());
+
+        Task task = taskQueue.getNextTaskForCurrentFloor(elevator.getCurrentFloor().getFloorNumber());
         if (task == null) {
             return;
         }

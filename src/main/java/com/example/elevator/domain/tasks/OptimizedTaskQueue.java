@@ -5,14 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
-import static com.example.elevator.domain.Direction.*;
-
 @RequiredArgsConstructor
 public class OptimizedTaskQueue implements TaskQueue {
     private final int numberOfFloors;
     private final List<MoveTask> moveTasks = new ArrayList<>();
     private final Set<CallTask> callTasks = new HashSet<>();
-    private Direction lastDirection = null;
 
     @Override
     public void addTask(Task task) {
@@ -25,46 +22,83 @@ public class OptimizedTaskQueue implements TaskQueue {
     }
 
     @Override
-    public boolean hasNextTaskFromCurrentFloor(int currentFloor) {
+    public boolean hasNextTaskForCurrentFloor(int currentFloor) {
         return !moveTasks.isEmpty() || !callTasks.isEmpty();
     }
 
     @Override
-    public Task getNextTaskFromCurrentFloor(int currentFloor) {
-        if (!callTasks.isEmpty()) {
-            Optional<CallTask> result = callTasks.stream().filter(t -> t.getFloorNumber() == currentFloor).findAny();
-            if (result.isPresent()) {
-                return prepareResultForCallTask(result.get(), currentFloor);
+    public Task getNextTaskForCurrentFloor(int currentFloor) {
+        MoveTask mainTask = getMainTask();
+        if (mainTask != null) {
+            Task preMainTask = getPreMainTask(mainTask, currentFloor);
+            if (preMainTask != null) {
+                if (preMainTask.getFloorNumber() == currentFloor) {
+                    return getNextTaskForCurrentFloor(currentFloor);
+                }
+                return preMainTask;
             }
-            Direction lookupDirection;
-            if ((lastDirection == null || lastDirection == UP) && currentFloor != numberOfFloors || lastDirection == DOWN && currentFloor == 1) {
-                lookupDirection = UP;
-            } else {
-                lookupDirection = DOWN;
-            }
-            result = callTasks.stream().filter(t -> t.getCallDirection() == lookupDirection)
-                    .sorted(Comparator.comparingInt(a -> (a.getFloorNumber() - currentFloor)))
-                    .findAny();
-            if (result.isPresent()) {
-                return prepareResultForCallTask(result.get(), currentFloor);
-            }
+            return prepareTaskBeforeReturning(mainTask);
+        } else {
+            return prepareTaskBeforeReturning(getFirstOfRemainingCallTasks(currentFloor));
         }
+    }
+
+    private Task prepareTaskBeforeReturning(MoveTask task) {
+        if (task != null) {
+            moveTasks.remove(task);
+        }
+        return task;
+    }
+
+    private Task prepareTaskBeforeReturning(CallTask task) {
+        if (task != null) {
+            callTasks.remove(task);
+        }
+        return task;
+    }
+
+    private MoveTask getMainTask() {
         if (!moveTasks.isEmpty()) {
-            MoveTask task = moveTasks.remove(0);
-            lastDirection = compareFloors(currentFloor, task.getFloorNumber());
-            return task;
+            return moveTasks.get(0);
         }
         return null;
     }
 
-    private Task prepareResultForCallTask(CallTask callTask, int currentFloor) {
-        Direction newDirection = compareFloors(currentFloor, callTask.getFloorNumber());
-        if (lastDirection != null && newDirection == null) {
-            callTasks.remove(callTask);
-            return getNextTaskFromCurrentFloor(currentFloor);
+    private CallTask getFirstOfRemainingCallTasks(int currentFloor) {
+        List<Integer> floors;
+        if (currentFloor != 1) {
+            floors = Direction.countFloorsFromCurrentInDirection(currentFloor, Direction.DOWN, numberOfFloors);
+        } else {
+            floors = Direction.countFloorsFromCurrentInDirection(currentFloor, Direction.UP, numberOfFloors);
         }
-        lastDirection = newDirection;
-        callTasks.remove(callTask);
-        return callTask;
+        for (Integer floor : floors) {
+            Optional<CallTask> result = callTasks.stream().filter(t -> t.getFloorNumber() == floor).findAny();
+            if (result.isPresent()) {
+                return result.get();
+            }
+        }
+        return null;
+    }
+
+    private Task getPreMainTask(MoveTask mainTask, int currentFloor) {
+        Direction direction = Direction.compareFloors(currentFloor, mainTask.getFloorNumber());
+        if (direction == null) {
+            return null;
+        }
+        for (Integer floor : Direction.countFloorsBetweenTwoFloors(currentFloor, mainTask.getFloorNumber())) {
+            Optional<CallTask> callTaskResult = callTasks.stream()
+                    .filter(t -> t.getFloorNumber() == floor && t.getCallDirection() == direction)
+                    .findAny();
+            if (callTaskResult.isPresent()) {
+                return prepareTaskBeforeReturning(callTaskResult.get());
+            }
+            Optional<MoveTask> moveTaskResult = moveTasks.stream()
+                    .filter(t -> t.getFloorNumber() == floor && t != mainTask)
+                    .findAny();
+            if (moveTaskResult.isPresent()) {
+                return prepareTaskBeforeReturning(moveTaskResult.get());
+            }
+        }
+        return null;
     }
 }
