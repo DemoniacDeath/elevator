@@ -26,7 +26,7 @@ class ElevatorIntegrationTest {
     }
 
     private void shouldMoveThreePeople(TaskQueue taskQueue) {
-        Building building = Building.createBuildingWith(numberOfFloors);
+        Building building = Building.createBuildingWith(numberOfFloors, 1);
         Elevator elevator = building.getAvailableElevator();
         ElevatorController elevatorController = new ElevatorControllerDefaultImpl(taskQueue, elevator);
         List<Person> people = Arrays.asList(
