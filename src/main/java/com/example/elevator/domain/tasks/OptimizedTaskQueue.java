@@ -87,7 +87,9 @@ public class OptimizedTaskQueue implements TaskQueue {
         }
         for (Integer floor : Direction.countFloorsBetweenTwoFloors(currentFloor, mainTask.getFloorNumber())) {
             Optional<CallTask> callTaskResult = callTasks.stream()
-                    .filter(t -> t.getFloorNumber() == floor && t.getCallDirection() == direction)
+                    .filter(t -> t.getFloorNumber() == floor && (
+                            t.getCallDirection() == direction || t.getCallDirection() == null
+                    ))
                     .findAny();
             if (callTaskResult.isPresent()) {
                 return prepareTaskBeforeReturning(callTaskResult.get());

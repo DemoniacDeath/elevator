@@ -8,7 +8,7 @@ public class CallTask implements Task {
     private final int floorNumber;
     private final Direction callDirection;
 
-    public Direction getCallDirection() {
+    Direction getCallDirection() {
         return callDirection;
     }
 
@@ -18,6 +18,9 @@ public class CallTask implements Task {
 
     @Override
     public String toString() {
-        return "Go to floor #" + floorNumber + " to then go " + callDirection;
+        if (callDirection != null) {
+            return "Go to floor #" + floorNumber + " to then go " + callDirection;
+        }
+        return "Go to floor #" + floorNumber + " to then go in unknown direction";
     }
 }

@@ -2,6 +2,6 @@ package com.example.elevator.domain.buttons;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CallPanelTest {
+class TwoButtonCallPanelTest {
 //TODO: add some tests
 }

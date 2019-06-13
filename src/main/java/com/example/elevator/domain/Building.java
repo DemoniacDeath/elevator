@@ -23,10 +23,18 @@ public class Building {
         }
         Map<Integer, Floor> floors = new HashMap<>(numberOfFloors);
         for (int i = 1; i <= numberOfFloors; i++) {
-            Floor floor = new Floor(new CallPanel(
-                    new ElevatorCallButton(i, Direction.UP),
-                    new ElevatorCallButton(i, Direction.DOWN)
-            ), i);
+            CallPanel callPanel;
+            if (i == 1 || i == numberOfFloors) {
+                callPanel = new SingleButtonCallPanel(
+                        new ElevatorCallButton(i, null)
+                );
+            } else {
+                callPanel = new TwoButtonCallPanel(
+                        new ElevatorCallButton(i, Direction.UP),
+                        new ElevatorCallButton(i, Direction.DOWN)
+                );
+            }
+            Floor floor = new Floor(callPanel, i);
             floors.put(i, floor);
         }
         Set<Elevator> elevators = new HashSet<>(numberOfElevators);
