@@ -2,15 +2,12 @@ package com.example.elevator.service;
 
 import com.example.elevator.domain.Building;
 import com.example.elevator.domain.Elevator;
-import com.example.elevator.domain.Floor;
 import com.example.elevator.domain.Person;
-import com.example.elevator.domain.buttons.Button;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.example.elevator.domain.Direction.compareFloors;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorIntegrationTest {

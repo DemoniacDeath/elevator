@@ -4,8 +4,6 @@ import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.tasks.Task;
 import com.example.elevator.domain.tasks.TaskQueue;
 
-import java.util.Optional;
-
 public class DefaultTaskRunnerStrategy implements TaskRunnerStrategy {
 
     @Override

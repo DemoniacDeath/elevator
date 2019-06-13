@@ -1,9 +1,9 @@
 package com.example.elevator.domain;
 
-import com.example.elevator.domain.Direction;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class FloorComparatorTest {
     @Test

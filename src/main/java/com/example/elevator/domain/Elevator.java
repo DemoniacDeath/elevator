@@ -49,14 +49,14 @@ public class Elevator {
                 if (currentFloor.getFloorNumber() == building.getNumberOfFloors()) {
                     throw new ElevatorException("Cannot move elevator up from the last floor");
                 }
-                this.currentFloor = building.getFloor(this.currentFloor.getFloorNumber()+1);
+                this.currentFloor = building.getFloor(this.currentFloor.getFloorNumber() + 1);
                 log.info("Moving up one floor in " + calculateOnFloorMoveTime() + "s");
                 break;
             case DOWN:
                 if (currentFloor.getFloorNumber() == 1) {
                     throw new ElevatorException("Cannot move down from the first floor");
                 }
-                this.currentFloor = building.getFloor(this.currentFloor.getFloorNumber()-1);
+                this.currentFloor = building.getFloor(this.currentFloor.getFloorNumber() - 1);
                 log.info("Moving down one floor in " + calculateOnFloorMoveTime() + "s");
                 break;
         }

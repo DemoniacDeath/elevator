@@ -1,7 +1,6 @@
 package com.example.elevator.domain;
 
 import com.example.elevator.domain.buttons.*;
-import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
