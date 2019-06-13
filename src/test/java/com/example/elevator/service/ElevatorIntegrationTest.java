@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorIntegrationTest {
     private static final int numberOfFloors = 10;
+    private static final int numberOfElevators = 1;
     private static final Set<PersonSpec> personSpecifications = new HashSet<>(Arrays.asList(
             new PersonSpec("Alice", 1, 4),
             new PersonSpec("Bob", 3, 2),
@@ -51,7 +52,7 @@ class ElevatorIntegrationTest {
     }
 
     private void shouldMoveThreePeople(TaskQueue taskQueue) {
-        Building building = Building.createBuildingWith(numberOfFloors, 1);
+        Building building = Building.createBuildingWith(numberOfFloors, numberOfElevators);
         Elevator elevator = building.getAvailableElevator();
         ElevatorController elevatorController = new ElevatorControllerDefaultImpl(taskQueue, elevator);
         List<Person> people = new ArrayList<>(personSpecifications.size());
