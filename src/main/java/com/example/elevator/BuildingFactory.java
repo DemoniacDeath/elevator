@@ -1,9 +1,6 @@
 package com.example.elevator;
 
 import com.example.elevator.buttons.*;
-import com.example.elevator.tasks.DefaultTaskRunnerStrategy;
-import com.example.elevator.tasks.ElevatorController;
-import com.example.elevator.tasks.ElevatorControllerDefaultImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,12 +15,11 @@ class BuildingFactory {
         ElevatorStopButton stopButton = new ElevatorStopButton();
         ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
         Elevator elevator = new Elevator(controlPanel, 4, 1);
-        ElevatorController elevatorController = new ElevatorControllerDefaultImpl(elevator, new DefaultTaskRunnerStrategy());
         for (int i = 1; i <= numberOfFloors; i++) {
-            floorButtons.put(i, new ElevatorFloorButton(i, elevatorController));
+            floorButtons.put(i, new ElevatorFloorButton(i));
             floorCallButtons.put(i, new CallPanel(
-                    new ElevatorCallButton(i, Direction.UP, elevatorController),
-                    new ElevatorCallButton(i, Direction.DOWN, elevatorController)
+                    new ElevatorCallButton(i, Direction.UP),
+                    new ElevatorCallButton(i, Direction.DOWN)
             ));
         }
         return new Building(floorCallButtons, elevator);

@@ -2,6 +2,8 @@ package com.example.elevator;
 
 import com.example.elevator.buttons.ControlPanel;
 import com.example.elevator.tasks.ElevatorController;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.HashSet;
@@ -9,16 +11,20 @@ import java.util.Set;
 
 @Log4j2
 public class Elevator {
+    @Getter
+    private final Set<Person> peopleInside = new HashSet<>();
+    @Getter
+    private final ControlPanel controlPanel;
     private final int height;
     private final int speed;
-    private final Set<Person> peopleInside = new HashSet<>();
-    private final ControlPanel controlPanel;
 
+    @Getter
     private int currentFloor = 1;
+    @Getter
+    @Setter
+    private Building building;
     private boolean stopped = false;
     private boolean doorsOpen = false;
-    private Building building;
-    private ElevatorController elevatorController;
 
     Elevator(ControlPanel controlPanel, int height, int speed) {
         this.controlPanel = controlPanel;
@@ -33,7 +39,7 @@ public class Elevator {
         if (stopped) {
             throw new ElevatorException("Cannot move elevator while it's stopped");
         }
-        switch(direction) {
+        switch (direction) {
             case UP:
                 if (currentFloor == building.getNumberOfFloors()) {
                     throw new ElevatorException("Cannot move elevator up from the last floor");
@@ -70,6 +76,7 @@ public class Elevator {
         if (!peopleInside.remove(person)) {
             throw new ElevatorException("Cannot make a person leave if the person is not inside elevator");
         }
+        person.setCurrentFloor(currentFloor);
         log.info("Person left on floor #" + currentFloor);
     }
 
@@ -88,39 +95,11 @@ public class Elevator {
         log.info("Stop command was received");
     }
 
-    Set<Person> getPeopleInside() {
-        return peopleInside;
-    }
-
-    public int getCurrentFloor() {
-        return currentFloor;
-    }
-
-    ControlPanel getControlPanel() {
-        return controlPanel;
-    }
-
-    void setBuilding(Building building) {
-        this.building = building;
-    }
-
-    public Building getBuilding() {
-        return building;
-    }
-
     boolean isStopped() {
         return stopped;
     }
 
     boolean areDoorsOpen() {
         return doorsOpen;
-    }
-
-    public void setElevatorController(ElevatorController elevatorController) {
-        this.elevatorController = elevatorController;
-    }
-
-    ElevatorController getElevatorController() {
-        return elevatorController;
     }
 }

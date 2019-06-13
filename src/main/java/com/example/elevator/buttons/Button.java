@@ -1,6 +1,7 @@
 package com.example.elevator.buttons;
 
+import com.example.elevator.tasks.ElevatorController;
+
 public interface Button {
-    void press();
-    void pressAnd(Runnable then);
+    void press(ElevatorController elevatorController);
 }

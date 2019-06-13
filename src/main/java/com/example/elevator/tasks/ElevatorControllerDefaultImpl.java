@@ -2,19 +2,15 @@ package com.example.elevator.tasks;
 
 import com.example.elevator.Direction;
 import com.example.elevator.Elevator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@RequiredArgsConstructor
 public class ElevatorControllerDefaultImpl implements ElevatorController {
     private final TaskQueue taskQueue = new TaskQueue();
     private final Elevator elevator;
     private final TaskRunnerStrategy taskRunnerStrategy;
-
-    public ElevatorControllerDefaultImpl(Elevator elevator, TaskRunnerStrategy taskRunnerStrategy) {
-        this.elevator = elevator;
-        this.elevator.setElevatorController(this);
-        this.taskRunnerStrategy = taskRunnerStrategy;
-    }
 
     public void addTask(Task task) {
         taskQueue.addTask(task);
