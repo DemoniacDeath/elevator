@@ -41,11 +41,4 @@ public class ElevatorControllerDefaultImpl implements ElevatorController {
             elevator.moveOneFloor(Direction.compareFloors(elevator.getCurrentFloor().getFloorNumber(), floorNumber));
         }
     }
-
-    @Override
-    public void depressButtons() {
-        elevator.getCurrentFloor().getCallPanel().getButtonForDirection(Direction.UP).depress();
-        elevator.getCurrentFloor().getCallPanel().getButtonForDirection(Direction.DOWN).depress();
-        elevator.getControlPanel().getFloorButton(elevator.getCurrentFloor().getFloorNumber()).depress();
-    }
 }
