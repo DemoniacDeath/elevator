@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,7 +24,8 @@ class ElevatorTest {
     @Test
     void shouldMoveUpAndDown() {
         when(building.getNumberOfFloors()).thenReturn(2);
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
+        elevator.setBuilding(building);
         assertEquals(1, elevator.getCurrentFloor());
         elevator.moveOneFloor(Direction.UP);
         assertEquals(2, elevator.getCurrentFloor());
@@ -35,16 +35,14 @@ class ElevatorTest {
 
     @Test
     void shouldStop() {
-        lenient().when(building.getNumberOfFloors()).thenReturn(2);
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
         elevator.stop();
         assertTrue(elevator.isStopped());
     }
 
     @Test
     void shouldResume() {
-        lenient().when(building.getNumberOfFloors()).thenReturn(2);
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
         elevator.stop();
         elevator.stop();
         assertFalse(elevator.isStopped());
@@ -52,8 +50,7 @@ class ElevatorTest {
 
     @Test
     void shouldOpenDoorsAndCloseDoors() {
-        lenient().when(building.getNumberOfFloors()).thenReturn(2);
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
         elevator.openDoors();
         assertTrue(elevator.areDoorsOpen());
         elevator.closeDoors();
@@ -62,7 +59,7 @@ class ElevatorTest {
 
     @Test
     void shouldAllowAPersonToEnterAndLeave() {
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
         assertTrue(elevator.getPeopleInside().isEmpty());
         elevator.openDoors();
         elevator.enter(person);
@@ -79,46 +76,42 @@ class ElevatorTest {
     @Test
     void shouldThrowExceptionWhenMovingUpOnLastFloor() {
         when(building.getNumberOfFloors()).thenReturn(2);
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
+        elevator.setBuilding(building);
         elevator.moveOneFloor(Direction.UP);
         assertThrows(ElevatorException.class, () -> elevator.moveOneFloor(Direction.UP));
     }
 
     @Test
     void shouldThrowExceptionWhenMovingDownOnFirstFloor() {
-        lenient().when(building.getNumberOfFloors()).thenReturn(2);
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
         assertThrows(ElevatorException.class, () -> elevator.moveOneFloor(Direction.DOWN));
     }
 
     @Test
     void shouldThrowExceptionWhenMovingWhileStopped() {
-        lenient().when(building.getNumberOfFloors()).thenReturn(2);
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
         elevator.stop();
         assertThrows(ElevatorException.class, () -> elevator.moveOneFloor(Direction.UP));
     }
 
     @Test
     void shouldThrowExceptionWhenMovingWhileDoorsAreOpened() {
-        lenient().when(building.getNumberOfFloors()).thenReturn(2);
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
         elevator.openDoors();
         assertThrows(ElevatorException.class, () -> elevator.moveOneFloor(Direction.UP));
     }
 
     @Test
     void shouldThrowExceptionWhenTryingToMakePersonThatIsNotInTheElevatorToLeave() {
-        lenient().when(building.getNumberOfFloors()).thenReturn(2);
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
         elevator.openDoors();
         assertThrows(ElevatorException.class, () -> elevator.leave(person));
     }
 
     @Test
     void shouldThrowExceptionWhenTryingToMakePersonEnterOrLeaveWithClosedDoors() {
-        lenient().when(building.getNumberOfFloors()).thenReturn(2);
-        Elevator elevator = new Elevator(this.building, this.controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
         assertThrows(ElevatorException.class, () -> elevator.enter(person));
         assertThrows(ElevatorException.class, () -> elevator.leave(person));
     }

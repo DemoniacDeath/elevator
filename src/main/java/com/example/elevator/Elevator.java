@@ -11,17 +11,16 @@ import java.util.Set;
 public class Elevator {
     private final int height;
     private final int speed;
-    private final Building building;
     private final Set<Person> peopleInside = new HashSet<>();
     private final ControlPanel controlPanel;
 
     private int currentFloor = 1;
     private boolean stopped = false;
     private boolean doorsOpen = false;
+    private Building building;
     private ElevatorController elevatorController;
 
-    Elevator(Building building, ControlPanel controlPanel, int height, int speed) {
-        this.building = building;
+    Elevator(ControlPanel controlPanel, int height, int speed) {
         this.controlPanel = controlPanel;
         this.height = height;
         this.speed = speed;
@@ -99,6 +98,10 @@ public class Elevator {
 
     ControlPanel getControlPanel() {
         return controlPanel;
+    }
+
+    void setBuilding(Building building) {
+        this.building = building;
     }
 
     public Building getBuilding() {

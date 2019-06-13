@@ -8,17 +8,16 @@ import com.example.elevator.tasks.ElevatorControllerDefaultImpl;
 import java.util.HashMap;
 import java.util.Map;
 
-class ElevatorFactory {
-    Elevator createElevator(int numberOfFloors) {
+class BuildingFactory {
+    Building createBuilding(int numberOfFloors) {
         if (numberOfFloors < 1) {
             throw new ElevatorFactoryException("Cannot create elevator with less than 1 floor");
         }
         Map<Integer, CallPanel> floorCallButtons = new HashMap<>(numberOfFloors);
         Map<Integer, Button> floorButtons = new HashMap<>(numberOfFloors);
-        Building building = new Building(floorCallButtons);
         ElevatorStopButton stopButton = new ElevatorStopButton();
         ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
-        Elevator elevator = new Elevator(building, controlPanel, 4, 1);
+        Elevator elevator = new Elevator(controlPanel, 4, 1);
         ElevatorController elevatorController = new ElevatorControllerDefaultImpl(elevator, new DefaultTaskRunnerStrategy());
         for (int i = 1; i <= numberOfFloors; i++) {
             floorButtons.put(i, new ElevatorFloorButton(i, elevatorController));
@@ -27,6 +26,6 @@ class ElevatorFactory {
                     new ElevatorCallButton(i, Direction.DOWN, elevatorController)
             ));
         }
-        return elevator;
+        return new Building(floorCallButtons, elevator);
     }
 }

@@ -6,11 +6,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ElevatorIntegrationTest {
-    private final ElevatorFactory elevatorFactory = new ElevatorFactory();
+    private final BuildingFactory buildingFactory = new BuildingFactory();
 
     @Test
     void testShouldMoveThreePeople() {
-        Elevator elevator = elevatorFactory.createElevator(4);
+        Building building = buildingFactory.createBuilding(4);
+        Elevator elevator = building.getAvailableElevator();
         Person person1 = new Person(1, 4);
         Person person2 = new Person(3, 2);
         Person person3 = new Person(4, 1);
