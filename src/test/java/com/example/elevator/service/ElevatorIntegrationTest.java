@@ -42,7 +42,6 @@ class ElevatorIntegrationTest {
         }
 
         ProcessRunner.run(compositeProcessor);
-        assertTrue(true);
         assertNotNull(people.get(0).getCurrentFloor());
         assertNotNull(people.get(1).getCurrentFloor());
         assertNotNull(people.get(2).getCurrentFloor());
