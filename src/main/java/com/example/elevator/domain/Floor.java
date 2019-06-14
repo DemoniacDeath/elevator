@@ -14,4 +14,8 @@ public class Floor {
     public String toString() {
         return "Floor #" + floorNumber;
     }
+
+    void depressCallButtons() {
+        getCallPanel().depressButtons();
+    }
 }

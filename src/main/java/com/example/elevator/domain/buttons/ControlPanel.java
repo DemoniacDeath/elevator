@@ -1,5 +1,7 @@
 package com.example.elevator.domain.buttons;
 
+import com.example.elevator.domain.Floor;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,5 +20,9 @@ public class ControlPanel {
 
     public Button getFloorButton(int floor) {
         return floorButtons.get(floor);
+    }
+
+    public void depressButtonForFloor(Floor currentFloor) {
+        getFloorButton(currentFloor.getFloorNumber()).depress();
     }
 }

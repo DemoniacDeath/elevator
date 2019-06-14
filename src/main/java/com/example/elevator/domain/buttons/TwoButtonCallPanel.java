@@ -22,4 +22,10 @@ public class TwoButtonCallPanel implements CallPanel {
                 return null;
         }
     }
+
+    @Override
+    public void depressButtons() {
+        upButton.depress();
+        downButton.depress();
+    }
 }

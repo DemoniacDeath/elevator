@@ -121,4 +121,9 @@ public class Elevator {
     public boolean areDoorsOpen() {
         return doorsOpen;
     }
+
+    public void depressFloorButton() {
+        getCurrentFloor().depressCallButtons();
+        getControlPanel().depressButtonForFloor(getCurrentFloor());
+    }
 }

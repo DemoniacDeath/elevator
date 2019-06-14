@@ -9,8 +9,6 @@ public interface ElevatorController extends Processor {
 
     Elevator getElevator();
 
-    void moveElevatorToFloor(int floorNumber);
-
     void stop();
 
     void resume();

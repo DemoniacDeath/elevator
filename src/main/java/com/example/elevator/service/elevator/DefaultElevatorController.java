@@ -6,19 +6,23 @@ import com.example.elevator.domain.tasks.MoveTask;
 import com.example.elevator.domain.tasks.Task;
 import com.example.elevator.domain.tasks.TaskQueue;
 import com.example.elevator.domain.tasks.TaskRegistry;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Set;
 import java.util.stream.Stream;
 
 @Log4j2
-public class DefaultElevatorController extends AbstractElevatorController {
+public class DefaultElevatorController implements ElevatorController {
+    @Getter
+    final Elevator elevator;
+
     private final TaskQueue<MoveTask> taskQueue;
     private final TaskRegistry taskRegistry;
     private Task currentTask = null;
 
     public DefaultElevatorController(TaskQueue<MoveTask> taskQueue, TaskRegistry taskRegistry, Elevator elevator) {
-        super(elevator);
+        this.elevator = elevator;
         this.taskRegistry = taskRegistry;
         this.taskQueue = taskQueue;
     }
@@ -85,24 +89,31 @@ public class DefaultElevatorController extends AbstractElevatorController {
     }
 
     private void moveElevatorTowardsFloor(int toFloorNumber) {
+        if (toFloorNumber < 1) {
+            throw new ElevatorControllerException("Cannot go to floor number that is less than 1");
+        }
+        if (toFloorNumber > elevator.getBuilding().getNumberOfFloors()) {
+            throw new ElevatorControllerException("Cannot go to floor number that is more than number of floors in the building");
+        }
         Direction direction = Direction.compareFloors(elevator.getCurrentFloor().getFloorNumber(), toFloorNumber);
         if (direction == null) {
             return;
         }
-        switch (direction) {
-            case DOWN:
-                moveElevatorToFloor(elevator.getCurrentFloor().getFloorNumber()-1);
-                break;
-            case UP:
-                moveElevatorToFloor(elevator.getCurrentFloor().getFloorNumber()+1);
-                break;
-        }
+        elevator.moveOneFloor(direction);
     }
 
     private void processTaskCompletionOnCurrentFloor() {
         elevator.openDoors();
-        elevator.getCurrentFloor().getCallPanel().getButtonForDirection(Direction.UP).depress();
-        elevator.getCurrentFloor().getCallPanel().getButtonForDirection(Direction.DOWN).depress();
-        elevator.getControlPanel().getFloorButton(elevator.getCurrentFloor().getFloorNumber()).depress();
+        elevator.depressFloorButton();
+    }
+
+    @Override
+    public void stop() {
+        elevator.stop();
+    }
+
+    @Override
+    public void resume() {
+        elevator.resume();
     }
 }

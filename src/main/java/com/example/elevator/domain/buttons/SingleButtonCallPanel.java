@@ -11,4 +11,9 @@ public class SingleButtonCallPanel implements CallPanel {
     public Button getButtonForDirection(Direction direction) {
         return callButton;
     }
+
+    @Override
+    public void depressButtons() {
+        callButton.depress();
+    }
 }
