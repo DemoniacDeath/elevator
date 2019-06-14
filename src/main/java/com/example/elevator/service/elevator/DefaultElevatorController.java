@@ -9,13 +9,13 @@ import com.example.elevator.domain.tasks.TaskRegistry;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
 @Log4j2
 public class DefaultElevatorController implements ElevatorController {
-    @Getter
-    final Elevator elevator;
+    private final Elevator elevator;
 
     private final TaskQueue<MoveTask> taskQueue;
     private final TaskRegistry taskRegistry;
@@ -28,12 +28,17 @@ public class DefaultElevatorController implements ElevatorController {
     }
 
     @Override
+    public Stream<Elevator> getElevators() {
+        return Stream.of(elevator);
+    }
+
+    @Override
     public void addTask(Task task) {
         taskRegistry.register(task);
         if (task instanceof MoveTask) {
             taskQueue.addTask((MoveTask)task);
         }
-        log.info("Received a task: " + task.toString());
+        log.info(elevator + ": Received a task: " + task.toString());
     }
 
     private void acceptTask(Task task) {
@@ -115,5 +120,18 @@ public class DefaultElevatorController implements ElevatorController {
     @Override
     public void resume() {
         elevator.resume();
+    }
+
+    @Override
+    public int getNumberOfTasks() {
+        return this.taskRegistry.size();
+    }
+
+    @Override
+    public ElevatorController getElevatorControllerFor(Elevator elevator) {
+        if (this.elevator == elevator) {
+            return this;
+        }
+        return null;
     }
 }

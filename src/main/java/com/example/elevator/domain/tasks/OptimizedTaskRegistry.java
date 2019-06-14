@@ -66,6 +66,11 @@ public class OptimizedTaskRegistry implements TaskRegistry {
         return callTasks.isEmpty() && moveTasks.isEmpty();
     }
 
+    @Override
+    public int size() {
+        return callTasks.size() + moveTasks.size();
+    }
+
     private void accept(MoveTask task) {
         moveTasks.remove(task);
     }

@@ -1,23 +1,22 @@
 package com.example.elevator.service;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CompositeProcessor implements Processor {
-    private List<Processor> processorList = new ArrayList<>();
+public class CompositeProcessor<T extends Processor> implements Processor {
+    @Getter
+    private List<T> processorList = new ArrayList<>();
 
-    public CompositeProcessor(Processor... processors) {
-        processorList.addAll(Arrays.asList(processors));
-    }
-
-    public void addProcessor(Processor processor) {
+    public void addProcessor(T processor) {
         processorList.add(processor);
     }
 
     @Override
     public boolean canContinue() {
-        for (Processor processor : processorList) {
+        for (T processor : processorList) {
             if (processor.canContinue()) {
                 return true;
             }
@@ -27,7 +26,7 @@ public class CompositeProcessor implements Processor {
 
     @Override
     public void process() {
-        for (Processor processor : processorList) {
+        for (T processor : processorList) {
             if (processor.canContinue()) {
                 processor.process();
             }

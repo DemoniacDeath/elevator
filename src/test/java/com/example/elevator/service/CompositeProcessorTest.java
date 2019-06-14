@@ -18,8 +18,9 @@ class CompositeProcessorTest {
 
     @Test
     void shouldComposeOtherProcessors() {
-        CompositeProcessor processor = new CompositeProcessor(processor1);
+        CompositeProcessor<Processor> processor = new CompositeProcessor<>();
 
+        processor.addProcessor(processor1);
         processor.addProcessor(processor2);
 
         when(processor1.canContinue()).thenReturn(false);

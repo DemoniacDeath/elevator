@@ -12,15 +12,14 @@ public class PressFloorButtonPersonController extends AbstractPersonController {
     @Override
     public boolean canContinue() {
         return person.getCurrentFloor() == null && person.getElevator() != null &&
-                person.getElevator().equals(elevatorController.getElevator()) &&
                 person.getElevator().getCurrentFloor().getFloorNumber() != person.getDesiredFloorNumber();
     }
 
     @Override
     public void process() {
-        Button button = elevatorController.getElevator().getControlPanel().getFloorButton(person.getDesiredFloorNumber());
+        Button button = person.getElevator().getControlPanel().getFloorButton(person.getDesiredFloorNumber());
         if (button != null && button.isNotPressed()) {
-            button.press(elevatorController);
+            button.press(elevatorController.getElevatorControllerFor(person.getElevator()));
         }
     }
 }

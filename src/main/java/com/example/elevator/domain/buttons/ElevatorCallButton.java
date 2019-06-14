@@ -14,7 +14,7 @@ public class ElevatorCallButton extends AbstractElevatorButton {
     public void press(ElevatorController elevatorController) {
         if (isNotPressed()) {
             elevatorController.addTask(new CallTask(floor, direction));
-            super.press(elevatorController);
+            setPressed();
         }
     }
 }

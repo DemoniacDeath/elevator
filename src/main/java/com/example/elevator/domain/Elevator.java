@@ -19,6 +19,7 @@ public class Elevator {
     private final ControlPanel controlPanel;
     private final int height;
     private final int speed;
+    private final String name;
 
     @Getter
     @Setter
@@ -30,7 +31,8 @@ public class Elevator {
     private boolean stopped = false;
     private boolean doorsOpen = false;
 
-    Elevator(Floor currentFloor, ControlPanel controlPanel, int height, int speed) {
+    Elevator(String name, Floor currentFloor, ControlPanel controlPanel, int height, int speed) {
+        this.name = name;
         this.currentFloor = currentFloor;
         this.controlPanel = controlPanel;
         this.height = height;
@@ -50,14 +52,14 @@ public class Elevator {
                     throw new ElevatorException("Cannot move elevator up from the last floor");
                 }
                 this.currentFloor = building.getFloor(this.currentFloor.getFloorNumber() + 1);
-                log.info("Moving up one floor in " + calculateOnFloorMoveTime() + "s");
+                log.info(this + ": Moving up one floor in " + calculateOnFloorMoveTime() + "s");
                 break;
             case DOWN:
                 if (currentFloor.getFloorNumber() == 1) {
                     throw new ElevatorException("Cannot move down from the first floor");
                 }
                 this.currentFloor = building.getFloor(this.currentFloor.getFloorNumber() - 1);
-                log.info("Moving down one floor in " + calculateOnFloorMoveTime() + "s");
+                log.info(this + ": Moving down one floor in " + calculateOnFloorMoveTime() + "s");
                 break;
         }
     }
@@ -73,7 +75,7 @@ public class Elevator {
         peopleInside.add(person);
         person.setCurrentFloor(null);
         person.setElevator(this);
-        log.info(person + " entered on " + currentFloor.toString());
+        log.info(this + ": " + person + " entered on " + currentFloor.toString());
     }
 
     public void leave(Person person) {
@@ -85,7 +87,7 @@ public class Elevator {
         }
         person.setCurrentFloor(currentFloor);
         person.setElevator(null);
-        log.info(person + " left on " + currentFloor.toString());
+        log.info(this + ": " + person + " left on " + currentFloor.toString());
     }
 
     public void closeDoors() {
@@ -93,7 +95,7 @@ public class Elevator {
             return;
         }
         doorsOpen = false;
-        log.info("Doors closed on " + currentFloor.toString());
+        log.info(this + ": Doors closed on " + currentFloor.toString());
     }
 
     public void openDoors() {
@@ -101,17 +103,17 @@ public class Elevator {
             return;
         }
         doorsOpen = true;
-        log.info("Doors opened on " + currentFloor.toString());
+        log.info(this + ": Doors opened on " + currentFloor.toString());
     }
 
     public void stop() {
         stopped = true;
-        log.info("Stop command was received");
+        log.info(this + ": Stop command was received");
     }
 
     public void resume() {
         stopped = false;
-        log.info("Resume command was received");
+        log.info(this + ": Resume command was received");
     }
 
     boolean isStopped() {
@@ -125,5 +127,10 @@ public class Elevator {
     public void depressFloorButton() {
         getCurrentFloor().depressCallButtons();
         getControlPanel().depressButtonForFloor(getCurrentFloor());
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

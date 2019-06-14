@@ -10,4 +10,5 @@ public interface TaskRegistry {
     Task getAnyTaskFromFloor(int floorNumber);
     void accept(Task task);
     boolean isEmpty();
+    int size();
 }

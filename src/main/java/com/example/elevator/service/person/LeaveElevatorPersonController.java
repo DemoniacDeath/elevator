@@ -11,13 +11,13 @@ public class LeaveElevatorPersonController extends AbstractPersonController {
     @Override
     public boolean canContinue() {
         return person.getCurrentFloor() == null &&
-                person.getElevator() != null && person.getElevator().equals(elevatorController.getElevator()) &&
-                elevatorController.getElevator().areDoorsOpen() &&
-                elevatorController.getElevator().getCurrentFloor().getFloorNumber() == person.getDesiredFloorNumber();
+                person.getElevator() != null &&
+                person.getElevator().areDoorsOpen() &&
+                person.getElevator().getCurrentFloor().getFloorNumber() == person.getDesiredFloorNumber();
     }
 
     @Override
     public void process() {
-        elevatorController.getElevator().leave(person);
+        person.getElevator().leave(person);
     }
 }

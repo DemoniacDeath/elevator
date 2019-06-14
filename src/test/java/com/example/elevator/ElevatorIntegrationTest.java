@@ -7,8 +7,9 @@ import com.example.elevator.domain.tasks.OptimizedTaskRegistry;
 import com.example.elevator.domain.tasks.SimpleTaskQueue;
 import com.example.elevator.service.CompositeProcessor;
 import com.example.elevator.service.ProcessRunner;
+import com.example.elevator.service.Processor;
+import com.example.elevator.service.elevator.AggregateElevatorController;
 import com.example.elevator.service.elevator.DefaultElevatorController;
-import com.example.elevator.service.elevator.ElevatorController;
 import com.example.elevator.service.person.CompositePersonController;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ElevatorIntegrationTest {
     private static final int numberOfFloors = 10;
-    private static final int numberOfElevators = 1;
+    private static final int numberOfElevators = 2;
     private static final Set<PersonSpec> personSpecifications = new HashSet<>(Arrays.asList(
             new PersonSpec("Alice", 1, 4),
             new PersonSpec("Bob", 3, 2),
@@ -47,9 +48,7 @@ class ElevatorIntegrationTest {
     @Test
     void testShouldMovePeople() {
         Building building = Building.createBuildingWith(numberOfFloors, numberOfElevators);
-        Elevator elevator = building.getAvailableElevator();
-        ElevatorController elevatorController = new DefaultElevatorController(
-                new SimpleTaskQueue<>(), new OptimizedTaskRegistry(numberOfFloors), elevator);
+
         List<Person> people = new ArrayList<>(personSpecifications.size());
         for (PersonSpec ps : personSpecifications) {
             ps.person = Person.createPersonOnFloorWithDesiredFloor(
@@ -57,12 +56,18 @@ class ElevatorIntegrationTest {
             people.add(ps.person);
         }
 
-        CompositeProcessor compositeProcessor = new CompositeProcessor(elevatorController);
-        for (Person person : people) {
-            compositeProcessor.addProcessor(
-                    CompositePersonController.createDefaultCompositePersonController(person, elevatorController));
+        CompositeProcessor<Processor> compositeProcessor = new CompositeProcessor<>();
+        AggregateElevatorController aggregateElevatorController = new AggregateElevatorController();
+        for (Elevator elevator : building.getElevators()) {
+            aggregateElevatorController.addProcessor(new DefaultElevatorController(
+                    new SimpleTaskQueue<>(), new OptimizedTaskRegistry(numberOfFloors), elevator));
         }
 
+        compositeProcessor.addProcessor(aggregateElevatorController);
+        for (Person person : people) {
+            compositeProcessor.addProcessor(
+                    CompositePersonController.createDefaultCompositePersonController(person, aggregateElevatorController));
+        }
         ProcessRunner.run(compositeProcessor, 1000);
         for (PersonSpec ps : personSpecifications) {
             assertNotNull(ps.person.getCurrentFloor());

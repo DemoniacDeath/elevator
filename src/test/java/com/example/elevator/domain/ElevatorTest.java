@@ -36,7 +36,7 @@ class ElevatorTest {
         lenient().when(building.getNumberOfFloors()).thenReturn(2);
         lenient().when(building.getFloor(1)).thenReturn(floor1);
         lenient().when(building.getFloor(2)).thenReturn(floor2);
-        elevator = new Elevator(floor1, controlPanel, 4, 1);
+        elevator = new Elevator("Elevator", floor1, controlPanel, 4, 1);
     }
 
     //Happy paths

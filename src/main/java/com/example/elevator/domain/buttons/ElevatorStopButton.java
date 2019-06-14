@@ -8,10 +8,10 @@ public class ElevatorStopButton extends AbstractElevatorButton {
     public void press(ElevatorController elevatorController) {
         if (isNotPressed()) {
             elevatorController.stop();
-            super.press(elevatorController);
+            setPressed();
         } else {
             elevatorController.resume();
-            this.depress();
+            depress();
         }
     }
 }

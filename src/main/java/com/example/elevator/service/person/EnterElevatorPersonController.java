@@ -1,7 +1,10 @@
 package com.example.elevator.service.person;
 
+import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.Person;
 import com.example.elevator.service.elevator.ElevatorController;
+
+import java.util.stream.Stream;
 
 public class EnterElevatorPersonController extends AbstractPersonController {
     EnterElevatorPersonController(Person person, ElevatorController elevatorController) {
@@ -11,12 +14,17 @@ public class EnterElevatorPersonController extends AbstractPersonController {
     @Override
     public boolean canContinue() {
         return person.getElevator() == null &&
-                elevatorController.getElevator().getCurrentFloor().equals(person.getCurrentFloor()) &&
-                elevatorController.getElevator().areDoorsOpen();
+                getAvailableElevators()
+                    .count() > 0;
     }
 
     @Override
     public void process() {
-        elevatorController.getElevator().enter(person);
+        getAvailableElevators().forEach(e -> e.enter(person));
+    }
+
+    private Stream<Elevator> getAvailableElevators() {
+        return elevatorController.getElevators()
+                .filter(e -> e.getCurrentFloor().equals(person.getCurrentFloor()) && e.areDoorsOpen());
     }
 }

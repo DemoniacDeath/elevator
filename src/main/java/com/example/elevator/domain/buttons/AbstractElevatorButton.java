@@ -7,8 +7,7 @@ import lombok.RequiredArgsConstructor;
 abstract class AbstractElevatorButton implements Button {
     private boolean pressed = false;
 
-    @Override
-    public void press(ElevatorController elevatorController) {
+    void setPressed() {
         pressed = true;
     }
 

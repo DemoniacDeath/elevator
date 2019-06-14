@@ -1,6 +1,7 @@
 package com.example.elevator.domain;
 
 import com.example.elevator.domain.buttons.*;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 public class Building {
     private final Map<Integer, Floor> floors = new HashMap<>();
+    @Getter
     private final Set<Elevator> elevators;
 
     private Building(Map<Integer, Floor> floors, Set<Elevator> elevators) {
@@ -48,7 +50,7 @@ public class Building {
             if (!floors.keySet().contains(1)) {
                 throw new BuildingException("There is no first floor in the building");
             }
-            elevators.add(new Elevator(floors.get(1), controlPanel, 4, 1));
+            elevators.add(new Elevator("Elevator #" + i, floors.get(1), controlPanel, 4, 1));
         }
         return new Building(floors, elevators);
     }
@@ -61,7 +63,7 @@ public class Building {
         return floors.get(floor);
     }
 
-    public Elevator getAvailableElevator() {
+    Elevator getAvailableElevator() {
         return elevators.iterator().next();
     }
 }

@@ -12,7 +12,7 @@ public class ElevatorFloorButton extends AbstractElevatorButton {
     public void press(ElevatorController elevatorController) {
         if (isNotPressed()) {
             elevatorController.addTask(new MoveTask(floorNumber));
-            super.press(elevatorController);
+            setPressed();
         }
     }
 }
