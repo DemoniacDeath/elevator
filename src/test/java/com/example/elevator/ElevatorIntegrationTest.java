@@ -3,21 +3,20 @@ package com.example.elevator;
 import com.example.elevator.domain.Building;
 import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.Person;
-import com.example.elevator.domain.tasks.OptimizedTaskQueue;
+import com.example.elevator.domain.tasks.OptimizedTaskRegistry;
 import com.example.elevator.domain.tasks.SimpleTaskQueue;
-import com.example.elevator.domain.tasks.TaskQueue;
 import com.example.elevator.service.CompositeProcessor;
 import com.example.elevator.service.ProcessRunner;
+import com.example.elevator.service.elevator.DefaultElevatorController;
 import com.example.elevator.service.elevator.ElevatorController;
-import com.example.elevator.service.elevator.ElevatorControllerDefaultImpl;
-import com.example.elevator.service.person.*;
-import lombok.Data;
+import com.example.elevator.service.person.CompositePersonController;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ElevatorIntegrationTest {
     private static final int numberOfFloors = 10;
@@ -43,22 +42,14 @@ class ElevatorIntegrationTest {
             new PersonSpec("Victor", 5, 10),
             new PersonSpec("Walter", 9, 2),
             new PersonSpec("Wendy", 8, 3)
-
     ));
-    @Test
-    void testShouldMoveThreePeopleSimple() {
-        shouldMoveThreePeople(new SimpleTaskQueue());
-    }
 
     @Test
-    void testShouldMoveThreePeopleOptimized() {
-        shouldMoveThreePeople(new OptimizedTaskQueue(numberOfFloors));
-    }
-
-    private void shouldMoveThreePeople(TaskQueue taskQueue) {
+    void testShouldMovePeople() {
         Building building = Building.createBuildingWith(numberOfFloors, numberOfElevators);
         Elevator elevator = building.getAvailableElevator();
-        ElevatorController elevatorController = new ElevatorControllerDefaultImpl(taskQueue, elevator);
+        ElevatorController elevatorController = new DefaultElevatorController(
+                new SimpleTaskQueue<>(), new OptimizedTaskRegistry(numberOfFloors), elevator);
         List<Person> people = new ArrayList<>(personSpecifications.size());
         for (PersonSpec ps : personSpecifications) {
             ps.person = Person.createPersonOnFloorWithDesiredFloor(
@@ -72,16 +63,15 @@ class ElevatorIntegrationTest {
                     CompositePersonController.createDefaultCompositePersonController(person, elevatorController));
         }
 
-        ProcessRunner.run(compositeProcessor);
+        ProcessRunner.run(compositeProcessor, 1000);
         for (PersonSpec ps : personSpecifications) {
             assertNotNull(ps.person.getCurrentFloor());
             assertEquals(ps.desiredFloorNumber, ps.person.getCurrentFloor().getFloorNumber());
         }
     }
 
-    @Data
     @RequiredArgsConstructor
-    static class PersonSpec {
+    private static class PersonSpec {
         final String name;
         final int currentFloor;
         final int desiredFloorNumber;

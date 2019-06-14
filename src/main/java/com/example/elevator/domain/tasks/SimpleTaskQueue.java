@@ -3,18 +3,23 @@ package com.example.elevator.domain.tasks;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class SimpleTaskQueue implements TaskQueue {
-    private final Queue<Task> tasks = new LinkedList<>();
+public class SimpleTaskQueue<T extends Task> implements TaskQueue<T> {
+    private final Queue<T> tasks = new LinkedList<>();
 
-    public void addTask(Task task) {
+    public void addTask(T task) {
         tasks.add(task);
     }
 
-    public boolean hasNextTaskForCurrentFloor(int currentFloor) {
+    public boolean hasNextTask() {
         return tasks.peek() != null;
     }
 
-    public Task getNextTaskForCurrentFloor(int currentFloor) {
+    public T getNextTask() {
         return tasks.poll();
+    }
+
+    @Override
+    public void remove(T task) {
+        tasks.remove(task);
     }
 }

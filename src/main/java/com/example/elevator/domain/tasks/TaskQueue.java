@@ -1,7 +1,8 @@
 package com.example.elevator.domain.tasks;
 
-public interface TaskQueue {
-    void addTask(Task task);
-    boolean hasNextTaskForCurrentFloor(int currentFloor);
-    Task getNextTaskForCurrentFloor(int currentFloor);
+public interface TaskQueue<T extends Task> {
+    void addTask(T task);
+    boolean hasNextTask();
+    T getNextTask();
+    void remove(T task);
 }

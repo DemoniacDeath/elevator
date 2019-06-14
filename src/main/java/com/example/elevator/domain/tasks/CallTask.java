@@ -1,6 +1,7 @@
 package com.example.elevator.domain.tasks;
 
 import com.example.elevator.domain.Direction;
+import com.example.elevator.domain.Elevator;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -22,5 +23,10 @@ public class CallTask implements Task {
             return "Go to floor #" + floorNumber + " to then go " + callDirection;
         }
         return "Go to floor #" + floorNumber + " to then go in unknown direction";
+    }
+
+    @Override
+    public boolean isComplete(Elevator elevator) {
+        return elevator.getCurrentFloor().getFloorNumber() == floorNumber;
     }
 }

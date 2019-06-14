@@ -20,21 +20,21 @@ class SimpleTaskQueueTest {
 
     @Test
     void shouldFunctionAsAQueue() {
-        SimpleTaskQueue queue = new SimpleTaskQueue();
+        SimpleTaskQueue<Task> queue = new SimpleTaskQueue<>();
 
-        assertFalse(queue.hasNextTaskForCurrentFloor(1));
+        assertFalse(queue.hasNextTask());
         queue.addTask(task1);
-        assertTrue(queue.hasNextTaskForCurrentFloor(1));
+        assertTrue(queue.hasNextTask());
         queue.addTask(task2);
-        assertTrue(queue.hasNextTaskForCurrentFloor(1));
-        assertEquals(task1, queue.getNextTaskForCurrentFloor(1));
-        assertTrue(queue.hasNextTaskForCurrentFloor(1));
+        assertTrue(queue.hasNextTask());
+        assertEquals(task1, queue.getNextTask());
+        assertTrue(queue.hasNextTask());
         queue.addTask(task3);
-        assertTrue(queue.hasNextTaskForCurrentFloor(1));
-        assertEquals(task2, queue.getNextTaskForCurrentFloor(1));
-        assertTrue(queue.hasNextTaskForCurrentFloor(1));
-        assertEquals(task3, queue.getNextTaskForCurrentFloor(1));
-        assertFalse(queue.hasNextTaskForCurrentFloor(1));
+        assertTrue(queue.hasNextTask());
+        assertEquals(task2, queue.getNextTask());
+        assertTrue(queue.hasNextTask());
+        assertEquals(task3, queue.getNextTask());
+        assertFalse(queue.hasNextTask());
 
     }
 }
