@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class OptimizedTaskRegistry implements TaskRegistry {
-    private final int numberOfFloors;
     private final List<MoveTask> moveTasks = new ArrayList<>();
     private final Set<CallTask> callTasks = new HashSet<>();
 
@@ -45,7 +44,7 @@ public class OptimizedTaskRegistry implements TaskRegistry {
         }
         if (!callTasks.isEmpty()) {
             return callTasks.stream().min(
-                    Comparator.comparingInt(t -> t.getFloorNumber() - floorNumber)
+                    Comparator.comparingInt(t -> Math.abs(t.getFloorNumber() - floorNumber))
             ).orElse(null);
         }
         return null;

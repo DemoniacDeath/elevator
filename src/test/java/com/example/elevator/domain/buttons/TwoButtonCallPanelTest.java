@@ -7,6 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class TwoButtonCallPanelTest {
@@ -22,5 +24,15 @@ class TwoButtonCallPanelTest {
         assertEquals(upButton, panel.getButtonForDirection(Direction.UP));
         assertEquals(downButton, panel.getButtonForDirection(Direction.DOWN));
         assertNull(panel.getButtonForDirection(null));
+    }
+
+    @Test
+    void shouldDepressButtons() {
+        TwoButtonCallPanel panel = new TwoButtonCallPanel(upButton, downButton);
+
+        panel.depressButtons();
+
+        verify(upButton, times(1)).depress();
+        verify(downButton, times(1)).depress();
     }
 }

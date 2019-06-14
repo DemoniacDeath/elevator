@@ -19,7 +19,7 @@ public class TwoButtonCallPanel implements CallPanel {
             case DOWN:
                 return downButton;
             default:
-                return null;
+                throw new RuntimeException("Unknown value of Direction " + direction);
         }
     }
 

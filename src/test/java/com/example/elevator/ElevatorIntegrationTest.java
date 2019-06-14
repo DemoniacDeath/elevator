@@ -12,6 +12,7 @@ import com.example.elevator.service.elevator.AggregateElevatorController;
 import com.example.elevator.service.elevator.DefaultElevatorController;
 import com.example.elevator.service.person.CompositePersonController;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -19,6 +20,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@Tag("integration")
 class ElevatorIntegrationTest {
     private static final int numberOfFloors = 10;
     private static final int numberOfElevators = 2;
@@ -60,7 +62,7 @@ class ElevatorIntegrationTest {
         AggregateElevatorController aggregateElevatorController = new AggregateElevatorController();
         for (Elevator elevator : building.getElevators()) {
             aggregateElevatorController.addProcessor(new DefaultElevatorController(
-                    new SimpleTaskQueue<>(), new OptimizedTaskRegistry(numberOfFloors), elevator));
+                    new SimpleTaskQueue<>(), new OptimizedTaskRegistry(), elevator));
         }
 
         compositeProcessor.addProcessor(aggregateElevatorController);

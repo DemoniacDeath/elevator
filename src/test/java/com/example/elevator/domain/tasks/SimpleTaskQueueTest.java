@@ -36,5 +36,12 @@ class SimpleTaskQueueTest {
         assertEquals(task3, queue.getNextTask());
         assertFalse(queue.hasNextTask());
 
+        queue.addTask(task1);
+        queue.addTask(task2);
+        queue.addTask(task3);
+        assertTrue(queue.hasNextTask());
+        queue.remove(task2);
+        assertEquals(task1, queue.getNextTask());
+        assertEquals(task3, queue.getNextTask());
     }
 }

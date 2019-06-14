@@ -47,9 +47,7 @@ public class Building {
                 floorButtons.put(j, new ElevatorFloorButton(j));
             }
             ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
-            if (!floors.keySet().contains(1)) {
-                throw new BuildingException("There is no first floor in the building");
-            }
+            assert floors.keySet().contains(1);
             elevators.add(new Elevator("Elevator #" + i, floors.get(1), controlPanel, 4, 1));
         }
         return new Building(floors, elevators);

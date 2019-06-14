@@ -6,10 +6,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DirectionTest {
+
+    @Test
+    void shouldConvertToString() {
+        Direction direction = Direction.UP;
+        assertTrue(direction.toString().toUpperCase().contains("UP"));
+        direction = Direction.DOWN;
+        assertTrue(direction.toString().toUpperCase().contains("DOWN"));
+
+    }
+
     @Test
     void shouldCompareFloors() {
         assertEquals(Direction.UP, Direction.compareFloors(1, 2));

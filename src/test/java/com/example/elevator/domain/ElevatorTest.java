@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ElevatorTest {
@@ -84,6 +85,13 @@ class ElevatorTest {
         elevator.leave(person);
         elevator.closeDoors();
         assertTrue(elevator.getPeopleInside().isEmpty());
+    }
+
+    @Test
+    void shouldDepressButtons() {
+        elevator.depressFloorButton();
+        verify(floor1).depressCallButtons();
+        verify(controlPanel).depressButtonForFloor(floor1);
     }
 
     //Exception paths
