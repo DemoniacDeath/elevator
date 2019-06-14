@@ -65,7 +65,9 @@ class ElevatorTest {
     @Test
     void shouldOpenDoorsAndCloseDoors() {
         elevator.openDoors();
+        elevator.openDoors();
         assertTrue(elevator.areDoorsOpen());
+        elevator.closeDoors();
         elevator.closeDoors();
         assertFalse(elevator.areDoorsOpen());
     }

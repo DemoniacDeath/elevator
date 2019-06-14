@@ -1,4 +1,4 @@
-package com.example.elevator.service;
+package com.example.elevator.service.elevator;
 
 import com.example.elevator.domain.Direction;
 import com.example.elevator.domain.Elevator;
@@ -49,5 +49,15 @@ public class ElevatorControllerDefaultImpl implements ElevatorController {
         while (elevator.getCurrentFloor().getFloorNumber() != floorNumber) {
             elevator.moveOneFloor(Direction.compareFloors(elevator.getCurrentFloor().getFloorNumber(), floorNumber));
         }
+    }
+
+    @Override
+    public void stop() {
+        elevator.stop();
+    }
+
+    @Override
+    public void resume() {
+        elevator.resume();
     }
 }

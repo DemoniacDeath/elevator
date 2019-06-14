@@ -6,7 +6,9 @@ import com.example.elevator.domain.Person;
 import com.example.elevator.domain.tasks.OptimizedTaskQueue;
 import com.example.elevator.domain.tasks.SimpleTaskQueue;
 import com.example.elevator.domain.tasks.TaskQueue;
-import lombok.AllArgsConstructor;
+import com.example.elevator.service.elevator.ElevatorController;
+import com.example.elevator.service.elevator.ElevatorControllerDefaultImpl;
+import com.example.elevator.service.person.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -64,8 +66,8 @@ class ElevatorIntegrationTest {
 
         CompositeProcessor compositeProcessor = new CompositeProcessor(elevatorController);
         for (Person person : people) {
-            PersonController personController = new PersonController(person, elevatorController);
-            compositeProcessor.addProcessor(personController);
+            compositeProcessor.addProcessor(
+                    CompositePersonController.createDefaultCompositePersonController(person, elevatorController));
         }
 
         ProcessRunner.run(compositeProcessor);

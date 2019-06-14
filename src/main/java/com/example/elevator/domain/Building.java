@@ -41,10 +41,10 @@ public class Building {
         for (int i = 0; i < numberOfElevators; i++) {
             Map<Integer, Button> floorButtons = new HashMap<>(numberOfFloors);
             ElevatorStopButton stopButton = new ElevatorStopButton();
-            ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
             for (int j = 1; j <= numberOfFloors; j++) {
                 floorButtons.put(j, new ElevatorFloorButton(j));
             }
+            ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
             if (!floors.keySet().contains(1)) {
                 throw new BuildingException("There is no first floor in the building");
             }

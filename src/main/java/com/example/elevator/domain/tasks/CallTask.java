@@ -8,7 +8,7 @@ public class CallTask implements Task {
     private final int floorNumber;
     private final Direction callDirection;
 
-    Direction getCallDirection() {
+    public Direction getCallDirection() {
         return callDirection;
     }
 

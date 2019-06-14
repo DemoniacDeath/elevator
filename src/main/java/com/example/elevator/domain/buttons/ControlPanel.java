@@ -1,15 +1,18 @@
 package com.example.elevator.domain.buttons;
 
-import lombok.AllArgsConstructor;
-
+import java.util.HashMap;
 import java.util.Map;
 
-@AllArgsConstructor
 public class ControlPanel {
-    private Button stopButton;
-    private Map<Integer, Button> floorButtons;
+    private final Button stopButton;
+    private final Map<Integer, Button> floorButtons = new HashMap<>();
 
-    public Button getStopButton() {
+    public ControlPanel(Button stopButton, Map<Integer, Button> floorButtons) {
+        this.stopButton = stopButton;
+        this.floorButtons.putAll(floorButtons);
+    }
+
+    Button getStopButton() {
         return stopButton;
     }
 

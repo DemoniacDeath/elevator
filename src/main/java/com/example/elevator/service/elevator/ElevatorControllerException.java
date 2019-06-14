@@ -1,4 +1,4 @@
-package com.example.elevator.service;
+package com.example.elevator.service.elevator;
 
 class ElevatorControllerException extends RuntimeException {
     ElevatorControllerException(String s) {

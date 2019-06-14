@@ -1,7 +1,7 @@
 package com.example.elevator.domain.buttons;
 
 import com.example.elevator.domain.tasks.MoveTask;
-import com.example.elevator.service.ElevatorController;
+import com.example.elevator.service.elevator.ElevatorController;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
