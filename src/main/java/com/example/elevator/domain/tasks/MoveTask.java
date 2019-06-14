@@ -18,6 +18,6 @@ public class MoveTask implements Task {
 
     @Override
     public boolean isComplete(Elevator elevator) {
-        return elevator.getCurrentFloor().getFloorNumber() == floorNumber;
+        return elevator.getCurrentFloorNumber() == floorNumber;
     }
 }

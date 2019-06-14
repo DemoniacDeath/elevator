@@ -29,4 +29,8 @@ public class Person {
     public String toString() {
         return name;
     }
+
+    public int getCurrentFloorNumber() {
+        return getCurrentFloor().getFloorNumber();
+    }
 }

@@ -60,7 +60,7 @@ public class DefaultElevatorController implements ElevatorController {
             if (currentTask != null) {
                 this.acceptTask(currentTask);
             } else {
-                currentTask = taskRegistry.getAnyTaskFromFloor(elevator.getCurrentFloor().getFloorNumber());
+                currentTask = taskRegistry.getAnyTaskFromFloor(elevator.getCurrentFloorNumber());
                 this.acceptTask(currentTask);
             }
         }
@@ -95,8 +95,8 @@ public class DefaultElevatorController implements ElevatorController {
 
     private Set<Task> getTasksForFloorAndDirection() {
         return taskRegistry.getTasksForFloorAndDirection(
-                elevator.getCurrentFloor().getFloorNumber(), Direction.compareFloors(
-                        elevator.getCurrentFloor().getFloorNumber(), currentTask.getFloorNumber()
+                elevator.getCurrentFloorNumber(), Direction.compareFloors(
+                        elevator.getCurrentFloorNumber(), currentTask.getFloorNumber()
                 ));
     }
 
@@ -107,7 +107,7 @@ public class DefaultElevatorController implements ElevatorController {
         if (toFloorNumber > elevator.getBuilding().getNumberOfFloors()) {
             throw new ElevatorControllerException("Cannot go to floor number that is more than number of floors in the building");
         }
-        Direction direction = Direction.compareFloors(elevator.getCurrentFloor().getFloorNumber(), toFloorNumber);
+        Direction direction = Direction.compareFloors(elevator.getCurrentFloorNumber(), toFloorNumber);
         elevator.moveOneFloor(direction);
     }
 

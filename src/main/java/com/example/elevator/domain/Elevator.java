@@ -131,4 +131,8 @@ public class Elevator {
     public String toString() {
         return this.name;
     }
+
+    public int getCurrentFloorNumber() {
+        return getCurrentFloor().getFloorNumber();
+    }
 }

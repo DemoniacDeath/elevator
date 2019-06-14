@@ -21,7 +21,7 @@ class SingleButtonCallPanelTest {
 
         assertEquals(button, panel.getButtonForDirection(Direction.UP));
         assertEquals(button, panel.getButtonForDirection(Direction.DOWN));
-        assertEquals(button, panel.getButtonForDirection(null));
+        assertNull(panel.getButtonForDirection(null));
     }
 
     @Test

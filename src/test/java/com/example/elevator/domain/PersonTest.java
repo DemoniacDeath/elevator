@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PersonTest {
@@ -32,6 +33,11 @@ class PersonTest {
 
         assertNull(person.getCurrentFloor());
         assertEquals(elevator, person.getElevator());
+
+        person.setCurrentFloor(floor);
+        person.setElevator(null);
+        when(floor.getFloorNumber()).thenReturn(12);
+        assertEquals(12, person.getCurrentFloorNumber());
     }
 
 }

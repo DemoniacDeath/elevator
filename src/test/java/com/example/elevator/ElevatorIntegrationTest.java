@@ -11,7 +11,7 @@ import com.example.elevator.service.Processor;
 import com.example.elevator.service.elevator.AggregateElevatorController;
 import com.example.elevator.service.elevator.DefaultElevatorController;
 import com.example.elevator.service.elevator.ElevatorControllerComparator;
-import com.example.elevator.service.person.CompositePersonController;
+import com.example.elevator.service.person.*;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -69,12 +69,18 @@ class ElevatorIntegrationTest {
         compositeProcessor.addProcessor(aggregateElevatorController);
         for (Person person : people) {
             compositeProcessor.addProcessor(
-                    CompositePersonController.createDefaultCompositePersonController(person, aggregateElevatorController));
+                    new CompositePersonController(person, aggregateElevatorController,
+                            new EnterElevatorPersonController(person, aggregateElevatorController),
+                            new PressFloorButtonPersonController(person, aggregateElevatorController),
+                            new CallElevatorPersonController(person, aggregateElevatorController),
+                            new LeaveElevatorPersonController(person, aggregateElevatorController)
+                    )
+            );
         }
         ProcessRunner.run(compositeProcessor, 1000);
         for (PersonSpec ps : personSpecifications) {
             assertNotNull(ps.person.getCurrentFloor());
-            assertEquals(ps.desiredFloorNumber, ps.person.getCurrentFloor().getFloorNumber());
+            assertEquals(ps.desiredFloorNumber, ps.person.getCurrentFloorNumber());
         }
     }
 

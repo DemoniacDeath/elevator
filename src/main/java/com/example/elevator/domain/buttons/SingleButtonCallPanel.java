@@ -9,6 +9,9 @@ public class SingleButtonCallPanel implements CallPanel {
 
     @Override
     public Button getButtonForDirection(Direction direction) {
+        if (direction == null) {
+            return null;
+        }
         return callButton;
     }
 

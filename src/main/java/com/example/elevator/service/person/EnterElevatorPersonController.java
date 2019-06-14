@@ -7,7 +7,7 @@ import com.example.elevator.service.elevator.ElevatorController;
 import java.util.stream.Stream;
 
 public class EnterElevatorPersonController extends AbstractPersonController {
-    EnterElevatorPersonController(Person person, ElevatorController elevatorController) {
+    public EnterElevatorPersonController(Person person, ElevatorController elevatorController) {
         super(person, elevatorController);
     }
 

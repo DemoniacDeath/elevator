@@ -4,7 +4,7 @@ import com.example.elevator.domain.Person;
 import com.example.elevator.service.elevator.ElevatorController;
 
 public class LeaveElevatorPersonController extends AbstractPersonController {
-    LeaveElevatorPersonController(Person person, ElevatorController elevatorController) {
+    public LeaveElevatorPersonController(Person person, ElevatorController elevatorController) {
         super(person, elevatorController);
     }
 
@@ -13,7 +13,7 @@ public class LeaveElevatorPersonController extends AbstractPersonController {
         return person.getCurrentFloor() == null &&
                 person.getElevator() != null &&
                 person.getElevator().areDoorsOpen() &&
-                person.getElevator().getCurrentFloor().getFloorNumber() == person.getDesiredFloorNumber();
+                person.getElevator().getCurrentFloorNumber() == person.getDesiredFloorNumber();
     }
 
     @Override

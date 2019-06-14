@@ -33,9 +33,6 @@ class DefaultElevatorControllerTest {
     private CallTask callTask = new CallTask(1, null);
 
     @Mock
-    Floor floor;
-
-    @Mock
     Building building;
 
     @Test
@@ -64,10 +61,9 @@ class DefaultElevatorControllerTest {
         when(taskQueue.hasNextTask()).thenReturn(true);
         assertTrue(elevatorController.canContinue());
 
-        when(elevator.getCurrentFloor()).thenReturn(floor);
+        when(elevator.getCurrentFloorNumber()).thenReturn(1);
         when(elevator.getBuilding()).thenReturn(building);
         when(building.getNumberOfFloors()).thenReturn(3);
-        when(floor.getFloorNumber()).thenReturn(1);
         when(taskQueue.getNextTask()).thenReturn(moveTask);
         elevatorController.process();
         when(taskRegistry.isEmpty()).thenReturn(true);
@@ -80,8 +76,7 @@ class DefaultElevatorControllerTest {
     void shouldProcess() {
         when(building.getNumberOfFloors()).thenReturn(3);
         when(elevator.getBuilding()).thenReturn(building);
-        when(elevator.getCurrentFloor()).thenReturn(floor);
-        when(floor.getFloorNumber()).thenReturn(1);
+        when(elevator.getCurrentFloorNumber()).thenReturn(1);
         when(taskRegistry.getAnyTaskFromFloor(1)).thenReturn(callTask);
 
         DefaultElevatorController elevatorController = new DefaultElevatorController(taskQueue, taskRegistry, elevator);
@@ -95,7 +90,7 @@ class DefaultElevatorControllerTest {
         clearInvocations(elevator);
 
         elevatorController = new DefaultElevatorController(taskQueue, taskRegistry, elevator);
-        when(floor.getFloorNumber()).thenReturn(1);
+        when(elevator.getCurrentFloorNumber()).thenReturn(1);
         moveTask = new MoveTask(3);
         when(taskQueue.getNextTask()).thenReturn(moveTask);
         when(taskRegistry.getTasksForFloorAndDirection(1, Direction.UP))
@@ -105,7 +100,7 @@ class DefaultElevatorControllerTest {
         clearInvocations(elevator);
 
 
-        when(floor.getFloorNumber()).thenReturn(2);
+        when(elevator.getCurrentFloorNumber()).thenReturn(2);
         when(taskRegistry.getTasksForFloorAndDirection(2, Direction.UP))
                 .thenReturn(Collections.emptySet());
         elevatorController.process();

@@ -10,7 +10,7 @@ import java.util.List;
 public class CompositePersonController extends AbstractPersonController {
     private final List<AbstractPersonController> controllers = new ArrayList<>();
 
-    private CompositePersonController(Person person, ElevatorController elevatorController, AbstractPersonController... personControllers) {
+    public CompositePersonController(Person person, ElevatorController elevatorController, AbstractPersonController... personControllers) {
         super(person, elevatorController);
         controllers.addAll(Arrays.asList(personControllers));
     }
@@ -18,7 +18,7 @@ public class CompositePersonController extends AbstractPersonController {
     @Override
     public boolean canContinue() {
         return person.getCurrentFloor() == null ||
-                person.getCurrentFloor().getFloorNumber() != person.getDesiredFloorNumber();
+                person.getCurrentFloorNumber() != person.getDesiredFloorNumber();
     }
 
     @Override
@@ -28,14 +28,5 @@ public class CompositePersonController extends AbstractPersonController {
                 personController.process();
             }
         }
-    }
-
-    public static CompositePersonController createDefaultCompositePersonController(Person person, ElevatorController elevatorController) {
-        return new CompositePersonController(person, elevatorController,
-                new EnterElevatorPersonController(person, elevatorController),
-                new PressFloorButtonPersonController(person, elevatorController),
-                new CallElevatorPersonController(person, elevatorController),
-                new LeaveElevatorPersonController(person, elevatorController)
-        );
     }
 }

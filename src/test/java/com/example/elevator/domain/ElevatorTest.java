@@ -45,13 +45,13 @@ class ElevatorTest {
     void shouldMoveUpAndDown() {
         elevator.setBuilding(building);
         assertNotNull(elevator.getCurrentFloor());
-        assertEquals(1, elevator.getCurrentFloor().getFloorNumber());
+        assertEquals(1, elevator.getCurrentFloorNumber());
         elevator.moveOneFloor(Direction.UP);
         assertNotNull(elevator.getCurrentFloor());
-        assertEquals(2, elevator.getCurrentFloor().getFloorNumber());
+        assertEquals(2, elevator.getCurrentFloorNumber());
         elevator.moveOneFloor(Direction.DOWN);
         assertNotNull(elevator.getCurrentFloor());
-        assertEquals(1, elevator.getCurrentFloor().getFloorNumber());
+        assertEquals(1, elevator.getCurrentFloorNumber());
     }
 
     @Test
@@ -92,6 +92,10 @@ class ElevatorTest {
         elevator.depressFloorButton();
         verify(floor1).depressCallButtons();
         verify(controlPanel).depressButtonForFloor(floor1);
+    }
+
+    @Test
+    void shouldReturnCurrentFloorNumber() {
     }
 
     //Exception paths
