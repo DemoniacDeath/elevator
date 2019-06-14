@@ -10,6 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -89,7 +92,34 @@ class DefaultElevatorControllerTest {
         when(taskQueue.getNextTask()).thenReturn(moveTask);
         elevatorController.process();
         verify(elevator, times(1)).moveOneFloor(Direction.UP);
+        clearInvocations(elevator);
 
+        elevatorController = new DefaultElevatorController(taskQueue, taskRegistry, elevator);
+        when(floor.getFloorNumber()).thenReturn(1);
+        moveTask = new MoveTask(3);
+        when(taskQueue.getNextTask()).thenReturn(moveTask);
+        when(taskRegistry.getTasksForFloorAndDirection(1, Direction.UP))
+                .thenReturn(Collections.singleton(callTask));
+        elevatorController.process();
+        verify(elevator, times(1)).openDoors();
+        clearInvocations(elevator);
+
+
+        when(floor.getFloorNumber()).thenReturn(2);
+        when(taskRegistry.getTasksForFloorAndDirection(2, Direction.UP))
+                .thenReturn(Collections.emptySet());
+        elevatorController.process();
+        verify(elevator, times(1)).moveOneFloor(Direction.UP);
+        clearInvocations(elevator);
+
+        elevatorController = new DefaultElevatorController(taskQueue, taskRegistry, elevator);
+        moveTask = new MoveTask(-1);
+        when(taskQueue.getNextTask()).thenReturn(moveTask);
+        assertThrows(ElevatorControllerException.class, elevatorController::process);
+        elevatorController = new DefaultElevatorController(taskQueue, taskRegistry, elevator);
+        moveTask = new MoveTask(6);
+        when(taskQueue.getNextTask()).thenReturn(moveTask);
+        assertThrows(ElevatorControllerException.class, elevatorController::process);
     }
 
     @Test
@@ -106,5 +136,19 @@ class DefaultElevatorControllerTest {
         DefaultElevatorController elevatorController = new DefaultElevatorController(taskQueue, taskRegistry, elevator);
         when(taskRegistry.size()).thenReturn(2);
         assertEquals(2, elevatorController.getNumberOfTasks());
+    }
+
+    @Test
+    void shouldGetElevatorControllerForElevator() {
+        DefaultElevatorController elevatorController = new DefaultElevatorController(taskQueue, taskRegistry, elevator);
+        assertEquals(elevatorController, elevatorController.getElevatorControllerFor(elevator));
+        assertNull(elevatorController.getElevatorControllerFor(null));
+    }
+
+    @Test
+    void shouldGetElevators() {
+        DefaultElevatorController elevatorController = new DefaultElevatorController(taskQueue, taskRegistry, elevator);
+        assertEquals(1, elevatorController.getElevators().count());
+        assertTrue(elevatorController.getElevators().anyMatch(e -> e == elevator));
     }
 }

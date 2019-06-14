@@ -3,12 +3,17 @@ package com.example.elevator.service.elevator;
 import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.tasks.Task;
 import com.example.elevator.service.CompositeProcessor;
+import com.example.elevator.service.SimpleCompositeProcessor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class AggregateElevatorController extends CompositeProcessor<ElevatorController> implements ElevatorController {
+@RequiredArgsConstructor
+public class AggregateElevatorController implements ElevatorController, CompositeProcessor<ElevatorController> {
+    private final SimpleCompositeProcessor<ElevatorController> compositeProcessor;
+    private final ElevatorControllerComparator comparator;
+
     @Override
     public void addTask(Task task) {
         this.getAvailableElevatorController().addTask(task);
@@ -16,7 +21,7 @@ public class AggregateElevatorController extends CompositeProcessor<ElevatorCont
 
     @Override
     public Stream<Elevator> getElevators() {
-        return this.getProcessorList().stream().flatMap(ElevatorController::getElevators);
+        return compositeProcessor.getProcessorList().stream().flatMap(ElevatorController::getElevators);
     }
 
     @Override
@@ -31,12 +36,12 @@ public class AggregateElevatorController extends CompositeProcessor<ElevatorCont
 
     @Override
     public int getNumberOfTasks() {
-        return this.getProcessorList().stream().mapToInt(ElevatorController::getNumberOfTasks).sum();
+        return compositeProcessor.getProcessorList().stream().mapToInt(ElevatorController::getNumberOfTasks).sum();
     }
 
     @Override
     public ElevatorController getElevatorControllerFor(Elevator elevator) {
-        return this.getProcessorList().stream()
+        return compositeProcessor.getProcessorList().stream()
                 .map(p -> p.getElevatorControllerFor(elevator))
                 .filter(Objects::nonNull)
                 .findFirst().orElse(null)
@@ -44,9 +49,24 @@ public class AggregateElevatorController extends CompositeProcessor<ElevatorCont
     }
 
     private ElevatorController getAvailableElevatorController() {
-        return this.getProcessorList().stream()
-                .filter(Objects::nonNull).min(new ElevatorControllerComparator())
+        return compositeProcessor.getProcessorList().stream()
+                .filter(Objects::nonNull).min(comparator)
                 .orElse(null)
                 ;
+    }
+
+    @Override
+    public boolean canContinue() {
+        return this.compositeProcessor.canContinue();
+    }
+
+    @Override
+    public void process() {
+        this.compositeProcessor.process();
+    }
+
+    @Override
+    public void addProcessor(ElevatorController processor) {
+        this.compositeProcessor.addProcessor(processor);
     }
 }

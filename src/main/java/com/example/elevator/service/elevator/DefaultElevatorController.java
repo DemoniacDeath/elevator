@@ -6,10 +6,8 @@ import com.example.elevator.domain.tasks.MoveTask;
 import com.example.elevator.domain.tasks.Task;
 import com.example.elevator.domain.tasks.TaskQueue;
 import com.example.elevator.domain.tasks.TaskRegistry;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -36,7 +34,7 @@ public class DefaultElevatorController implements ElevatorController {
     public void addTask(Task task) {
         taskRegistry.register(task);
         if (task instanceof MoveTask) {
-            taskQueue.addTask((MoveTask)task);
+            taskQueue.addTask((MoveTask) task);
         }
         log.info(elevator + ": Received a task: " + task.toString());
     }
@@ -44,7 +42,7 @@ public class DefaultElevatorController implements ElevatorController {
     private void acceptTask(Task task) {
         taskRegistry.accept(task);
         if (task instanceof MoveTask) {
-            taskQueue.remove((MoveTask)task);
+            taskQueue.remove((MoveTask) task);
         }
     }
 
@@ -67,19 +65,7 @@ public class DefaultElevatorController implements ElevatorController {
             }
         }
 
-        Task taskToProcess = null;
-
-        if (currentTask != null) {
-            taskToProcess = currentTask;
-            Set<Task> tasks = taskRegistry.getTasksForFloorAndDirection(
-                    elevator.getCurrentFloor().getFloorNumber(), Direction.compareFloors(
-                            elevator.getCurrentFloor().getFloorNumber(), currentTask.getFloorNumber()
-                    ));
-            if (!tasks.isEmpty()) {
-                tasks.forEach(this::acceptTask);
-                taskToProcess = tasks.iterator().next();
-            }
-        }
+        Task taskToProcess = getTask();
 
         if (taskToProcess != null) {
             if (!taskToProcess.isComplete(elevator)) {
@@ -93,6 +79,27 @@ public class DefaultElevatorController implements ElevatorController {
         }
     }
 
+    private Task getTask() {
+        Task taskToProcess = null;
+
+        if (currentTask != null) {
+            taskToProcess = currentTask;
+            Set<Task> tasks = getTasksForFloorAndDirection();
+            if (!tasks.isEmpty()) {
+                tasks.forEach(this::acceptTask);
+                taskToProcess = tasks.iterator().next();
+            }
+        }
+        return taskToProcess;
+    }
+
+    private Set<Task> getTasksForFloorAndDirection() {
+        return taskRegistry.getTasksForFloorAndDirection(
+                elevator.getCurrentFloor().getFloorNumber(), Direction.compareFloors(
+                        elevator.getCurrentFloor().getFloorNumber(), currentTask.getFloorNumber()
+                ));
+    }
+
     private void moveElevatorTowardsFloor(int toFloorNumber) {
         if (toFloorNumber < 1) {
             throw new ElevatorControllerException("Cannot go to floor number that is less than 1");
@@ -101,9 +108,6 @@ public class DefaultElevatorController implements ElevatorController {
             throw new ElevatorControllerException("Cannot go to floor number that is more than number of floors in the building");
         }
         Direction direction = Direction.compareFloors(elevator.getCurrentFloor().getFloorNumber(), toFloorNumber);
-        if (direction == null) {
-            return;
-        }
         elevator.moveOneFloor(direction);
     }
 

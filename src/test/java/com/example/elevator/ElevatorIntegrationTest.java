@@ -5,11 +5,12 @@ import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.Person;
 import com.example.elevator.domain.tasks.OptimizedTaskRegistry;
 import com.example.elevator.domain.tasks.SimpleTaskQueue;
-import com.example.elevator.service.CompositeProcessor;
+import com.example.elevator.service.SimpleCompositeProcessor;
 import com.example.elevator.service.ProcessRunner;
 import com.example.elevator.service.Processor;
 import com.example.elevator.service.elevator.AggregateElevatorController;
 import com.example.elevator.service.elevator.DefaultElevatorController;
+import com.example.elevator.service.elevator.ElevatorControllerComparator;
 import com.example.elevator.service.person.CompositePersonController;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Tag;
@@ -58,8 +59,8 @@ class ElevatorIntegrationTest {
             people.add(ps.person);
         }
 
-        CompositeProcessor<Processor> compositeProcessor = new CompositeProcessor<>();
-        AggregateElevatorController aggregateElevatorController = new AggregateElevatorController();
+        SimpleCompositeProcessor<Processor> compositeProcessor = new SimpleCompositeProcessor<>();
+        AggregateElevatorController aggregateElevatorController = new AggregateElevatorController(new SimpleCompositeProcessor<>(), new ElevatorControllerComparator());
         for (Elevator elevator : building.getElevators()) {
             aggregateElevatorController.addProcessor(new DefaultElevatorController(
                     new SimpleTaskQueue<>(), new OptimizedTaskRegistry(), elevator));

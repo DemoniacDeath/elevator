@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CompositeProcessorTest {
+class SimpleCompositeProcessorTest {
     @Mock
     Processor processor1;
 
@@ -18,7 +18,7 @@ class CompositeProcessorTest {
 
     @Test
     void shouldComposeOtherProcessors() {
-        CompositeProcessor<Processor> processor = new CompositeProcessor<>();
+        SimpleCompositeProcessor<Processor> processor = new SimpleCompositeProcessor<>();
 
         processor.addProcessor(processor1);
         processor.addProcessor(processor2);
