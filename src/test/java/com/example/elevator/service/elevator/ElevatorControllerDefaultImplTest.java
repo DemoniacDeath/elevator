@@ -1,4 +1,4 @@
-package com.example.elevator.service;
+package com.example.elevator.service.elevator;
 
 import static org.junit.jupiter.api.Assertions.*;
 

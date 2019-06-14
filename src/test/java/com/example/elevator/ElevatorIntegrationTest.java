@@ -1,4 +1,4 @@
-package com.example.elevator.service;
+package com.example.elevator;
 
 import com.example.elevator.domain.Building;
 import com.example.elevator.domain.Elevator;
@@ -6,6 +6,8 @@ import com.example.elevator.domain.Person;
 import com.example.elevator.domain.tasks.OptimizedTaskQueue;
 import com.example.elevator.domain.tasks.SimpleTaskQueue;
 import com.example.elevator.domain.tasks.TaskQueue;
+import com.example.elevator.service.CompositeProcessor;
+import com.example.elevator.service.ProcessRunner;
 import com.example.elevator.service.elevator.ElevatorController;
 import com.example.elevator.service.elevator.ElevatorControllerDefaultImpl;
 import com.example.elevator.service.person.*;

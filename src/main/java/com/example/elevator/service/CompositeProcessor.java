@@ -7,11 +7,11 @@ import java.util.List;
 public class CompositeProcessor implements Processor {
     private List<Processor> processorList = new ArrayList<>();
 
-    CompositeProcessor(Processor... processors) {
+    public CompositeProcessor(Processor... processors) {
         processorList.addAll(Arrays.asList(processors));
     }
 
-    void addProcessor(Processor processor) {
+    public void addProcessor(Processor processor) {
         processorList.add(processor);
     }
 
