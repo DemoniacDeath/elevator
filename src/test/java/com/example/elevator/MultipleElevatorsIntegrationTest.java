@@ -5,9 +5,9 @@ import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.Person;
 import com.example.elevator.domain.tasks.OptimizedTaskRegistry;
 import com.example.elevator.domain.tasks.SimpleTaskQueue;
+import com.example.elevator.service.SimpleCompositeProcessor;
 import com.example.elevator.service.ProcessRunner;
 import com.example.elevator.service.Processor;
-import com.example.elevator.service.SimpleCompositeProcessor;
 import com.example.elevator.service.elevator.AggregateElevatorController;
 import com.example.elevator.service.elevator.DefaultElevatorController;
 import com.example.elevator.service.elevator.ElevatorControllerComparator;
@@ -22,9 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Tag("integration")
-public class ElevatorIntegrationTest {
+class MultipleElevatorsIntegrationTest {
     private static final int numberOfFloors = 10;
-    private static final int numberOfElevators = 1;
+    private static final int numberOfElevators = 2;
     private static final Set<PersonSpec> personSpecifications = new HashSet<>(Arrays.asList(
             new PersonSpec("Alice", 1, 4),
             new PersonSpec("Bob", 3, 2),
@@ -49,7 +49,7 @@ public class ElevatorIntegrationTest {
     ));
 
     @Test
-    void testShouldJustMovePeople() {
+    void testShouldMovePeopleWithTwoElevators() {
         Building building = Building.createBuildingWith(numberOfFloors, numberOfElevators, 700);
 
         List<Person> people = new ArrayList<>(personSpecifications.size());
@@ -84,6 +84,7 @@ public class ElevatorIntegrationTest {
             assertEquals(ps.desiredFloorNumber, ps.person.getCurrentFloorNumber());
         }
     }
+
     @RequiredArgsConstructor
     private static class PersonSpec {
         final String name;
