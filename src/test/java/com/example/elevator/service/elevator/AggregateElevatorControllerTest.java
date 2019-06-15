@@ -1,9 +1,8 @@
 package com.example.elevator.service.elevator;
 
 import com.example.elevator.domain.Elevator;
-import com.example.elevator.domain.tasks.MoveTask;
 import com.example.elevator.domain.tasks.Task;
-import com.example.elevator.service.SimpleCompositeProcessor;
+import com.example.elevator.service.SimpleCompositeProcessable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -36,7 +35,7 @@ class AggregateElevatorControllerTest {
     Task task;
 
     @Mock
-    SimpleCompositeProcessor<ElevatorController> compositeProcessor;
+    SimpleCompositeProcessable<ElevatorController> compositeProcessable;
 
     @Mock
     ElevatorControllerComparator comparator;
@@ -44,27 +43,27 @@ class AggregateElevatorControllerTest {
     @Test
     void shouldAggregate() {
         AggregateElevatorController elevatorController = new AggregateElevatorController(
-                compositeProcessor, comparator);
-        elevatorController.addProcessor(elevatorController1);
-        elevatorController.addProcessor(elevatorController2);
-        verify(compositeProcessor, times(1)).addProcessor(elevatorController1);
-        verify(compositeProcessor, times(1)).addProcessor(elevatorController2);
-        getInvocationContainer(compositeProcessor).clearInvocations();
+                compositeProcessable, comparator);
+        elevatorController.addProcessable(elevatorController1);
+        elevatorController.addProcessable(elevatorController2);
+        verify(compositeProcessable, times(1)).addProcessable(elevatorController1);
+        verify(compositeProcessable, times(1)).addProcessable(elevatorController2);
+        getInvocationContainer(compositeProcessable).clearInvocations();
 
-        when(compositeProcessor.canContinue()).thenReturn(false);
+        when(compositeProcessable.canContinue()).thenReturn(false);
         assertFalse(elevatorController.canContinue());
-        when(compositeProcessor.canContinue()).thenReturn(true);
+        when(compositeProcessable.canContinue()).thenReturn(true);
         assertTrue(elevatorController.canContinue());
 
         elevatorController.process();
-        verify(compositeProcessor, times(1)).process();
-        getInvocationContainer(compositeProcessor).clearInvocations();
+        verify(compositeProcessable, times(1)).process();
+        getInvocationContainer(compositeProcessable).clearInvocations();
 
         List<ElevatorController> elevatorControllers = Arrays.asList(
                 elevatorController1, elevatorController2
         );
-        when(compositeProcessor.getProcessors()).thenReturn(elevatorControllers);
-        assertEquals(elevatorControllers, elevatorController.getProcessors());
+        when(compositeProcessable.getProcessables()).thenReturn(elevatorControllers);
+        assertEquals(elevatorControllers, elevatorController.getProcessables());
         lenient().when(elevatorController1.getElevatorControllerFor(elevator1)).thenReturn(elevatorController1);
         lenient().when(elevatorController1.getElevatorControllerFor(elevator2)).thenReturn(null);
         lenient().when(elevatorController2.getElevatorControllerFor(elevator1)).thenReturn(null);

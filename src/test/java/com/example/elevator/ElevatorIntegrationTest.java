@@ -6,8 +6,8 @@ import com.example.elevator.domain.Person;
 import com.example.elevator.domain.tasks.OptimizedTaskRegistry;
 import com.example.elevator.domain.tasks.SimpleTaskQueue;
 import com.example.elevator.service.ProcessRunner;
-import com.example.elevator.service.Processor;
-import com.example.elevator.service.SimpleCompositeProcessor;
+import com.example.elevator.service.Processable;
+import com.example.elevator.service.SimpleCompositeProcessable;
 import com.example.elevator.service.elevator.AggregateElevatorController;
 import com.example.elevator.service.elevator.DefaultElevatorController;
 import com.example.elevator.service.elevator.ElevatorControllerComparator;
@@ -59,16 +59,16 @@ public class ElevatorIntegrationTest {
             people.add(ps.person);
         }
 
-        SimpleCompositeProcessor<Processor> compositeProcessor = new SimpleCompositeProcessor<>();
-        AggregateElevatorController aggregateElevatorController = new AggregateElevatorController(new SimpleCompositeProcessor<>(), new ElevatorControllerComparator());
+        SimpleCompositeProcessable<Processable> compositeProcessable = new SimpleCompositeProcessable<>();
+        AggregateElevatorController aggregateElevatorController = new AggregateElevatorController(new SimpleCompositeProcessable<>(), new ElevatorControllerComparator());
         for (Elevator elevator : building.getElevators()) {
-            aggregateElevatorController.addProcessor(new DefaultElevatorController(
+            aggregateElevatorController.addProcessable(new DefaultElevatorController(
                     new SimpleTaskQueue<>(), new OptimizedTaskRegistry(), elevator));
         }
 
-        compositeProcessor.addProcessor(aggregateElevatorController);
+        compositeProcessable.addProcessable(aggregateElevatorController);
         for (Person person : people) {
-            compositeProcessor.addProcessor(
+            compositeProcessable.addProcessable(
                     new CompositePersonController(person, aggregateElevatorController,
                             new EnterElevatorPersonController(person, aggregateElevatorController),
                             new CallElevatorPersonController(person, aggregateElevatorController),
@@ -78,7 +78,7 @@ public class ElevatorIntegrationTest {
                     )
             );
         }
-        ProcessRunner.run(compositeProcessor, 1000);
+        ProcessRunner.run(compositeProcessable, 1000);
         for (PersonSpec ps : personSpecifications) {
             assertNotNull(ps.person.getCurrentFloor());
             assertEquals(ps.desiredFloorNumber, ps.person.getCurrentFloorNumber());

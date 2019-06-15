@@ -1,6 +1,6 @@
 package com.example.elevator.service;
 
-public interface Processor {
+public interface Processable {
     boolean canContinue();
 
     void process();
