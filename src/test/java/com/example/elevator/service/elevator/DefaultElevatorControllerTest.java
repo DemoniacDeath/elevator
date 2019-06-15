@@ -118,15 +118,6 @@ class DefaultElevatorControllerTest {
     }
 
     @Test
-    void shouldStopAndResume() {
-        DefaultElevatorController elevatorController = new DefaultElevatorController(taskQueue, taskRegistry, elevator);
-        elevatorController.stop();
-        verify(elevator, times(1)).stop();
-        elevatorController.resume();
-        verify(elevator, times(1)).resume();
-    }
-
-    @Test
     void shouldReturnNumberOfTasks() {
         DefaultElevatorController elevatorController = new DefaultElevatorController(taskQueue, taskRegistry, elevator);
         when(taskRegistry.size()).thenReturn(2);

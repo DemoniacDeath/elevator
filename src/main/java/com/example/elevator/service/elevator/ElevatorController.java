@@ -11,10 +11,6 @@ public interface ElevatorController extends Processor {
 
     Stream<Elevator> getElevators();
 
-    void stop();
-
-    void resume();
-
     int getNumberOfTasks();
 
     ElevatorController getElevatorControllerFor(Elevator elevator);

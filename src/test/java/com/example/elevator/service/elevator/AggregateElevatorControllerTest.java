@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,9 +60,11 @@ class AggregateElevatorControllerTest {
         verify(compositeProcessor, times(1)).process();
         getInvocationContainer(compositeProcessor).clearInvocations();
 
-        when(compositeProcessor.getProcessorList()).thenReturn(Arrays.asList(
+        List<ElevatorController> elevatorControllers = Arrays.asList(
                 elevatorController1, elevatorController2
-        ));
+        );
+        when(compositeProcessor.getProcessors()).thenReturn(elevatorControllers);
+        assertEquals(elevatorControllers, elevatorController.getProcessors());
         lenient().when(elevatorController1.getElevatorControllerFor(elevator1)).thenReturn(elevatorController1);
         lenient().when(elevatorController1.getElevatorControllerFor(elevator2)).thenReturn(null);
         lenient().when(elevatorController2.getElevatorControllerFor(elevator1)).thenReturn(null);
@@ -84,14 +87,5 @@ class AggregateElevatorControllerTest {
         verify(elevatorController2, times(1)).addTask(task);
 
 
-    }
-
-    @Test
-    void shouldThrowExceptionWhenTryingToStopOrResume() {
-        AggregateElevatorController elevatorController = new AggregateElevatorController(
-                compositeProcessor, comparator
-        );
-        assertThrows(ElevatorControllerException.class, elevatorController::stop);
-        assertThrows(ElevatorControllerException.class, elevatorController::resume);
     }
 }

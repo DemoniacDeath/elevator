@@ -117,16 +117,6 @@ public class DefaultElevatorController implements ElevatorController {
     }
 
     @Override
-    public void stop() {
-        elevator.stop();
-    }
-
-    @Override
-    public void resume() {
-        elevator.resume();
-    }
-
-    @Override
     public int getNumberOfTasks() {
         return this.taskRegistry.size();
     }
