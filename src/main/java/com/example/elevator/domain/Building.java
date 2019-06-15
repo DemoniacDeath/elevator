@@ -19,7 +19,7 @@ public class Building {
         this.elevators.forEach(e -> e.setBuilding(this));
     }
 
-    public static Building createBuildingWith(int numberOfFloors, int numberOfElevators) {
+    public static Building createBuildingWith(int numberOfFloors, int numberOfElevators, int maximumWeight) {
         if (numberOfFloors < 1) {
             throw new BuildingException("Cannot create building with less than 1 floor");
         }
@@ -48,7 +48,7 @@ public class Building {
             }
             ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
             assert floors.keySet().contains(1);
-            elevators.add(new Elevator("Elevator #" + i, floors.get(1), controlPanel, 4, 1));
+            elevators.add(new Elevator("Elevator #" + i, floors.get(1), controlPanel, 4, 1, maximumWeight));
         }
         return new Building(floors, elevators);
     }

@@ -11,6 +11,8 @@ public class Person {
     @Getter
     private final String name;
     @Getter
+    private final int weight;
+    @Getter
     private final int desiredFloorNumber;
     @Getter
     @Setter
@@ -19,8 +21,8 @@ public class Person {
     @Setter
     private Elevator elevator = null;
 
-    public static Person createPersonOnFloorWithDesiredFloor(String name, int desiredFloorNumber, Floor currentFloor) {
-        Person person = new Person(name, desiredFloorNumber);
+    public static Person createPersonOnFloorWithDesiredFloor(String name, int weight, int desiredFloorNumber, Floor currentFloor) {
+        Person person = new Person(name, weight, desiredFloorNumber);
         person.setCurrentFloor(currentFloor);
         return person;
     }

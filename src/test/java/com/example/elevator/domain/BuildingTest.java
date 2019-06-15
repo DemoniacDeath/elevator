@@ -9,7 +9,7 @@ class BuildingTest {
     void shouldCreateBuilding() {
         final int numberOfFloors = 10;
         int numberOfElevators = 2;
-        Building building = Building.createBuildingWith(numberOfFloors, numberOfElevators);
+        Building building = Building.createBuildingWith(numberOfFloors, numberOfElevators, 150);
 
         assertEquals(10, building.getNumberOfFloors());
         assertNotNull(building.getAvailableElevator());
@@ -24,6 +24,6 @@ class BuildingTest {
 
     @Test
     void shouldThrowException() {
-        assertThrows(BuildingException.class, () -> Building.createBuildingWith(0, 1));
+        assertThrows(BuildingException.class, () -> Building.createBuildingWith(0, 1, 150));
     }
 }

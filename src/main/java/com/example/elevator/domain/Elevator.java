@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Log4j2
 public class Elevator {
@@ -20,6 +21,7 @@ public class Elevator {
     private final int height;
     private final int speed;
     private final String name;
+    private final int maximumWeight;
 
     @Getter
     @NonNull
@@ -30,12 +32,19 @@ public class Elevator {
     private boolean stopped = false;
     private boolean doorsOpen = false;
 
-    Elevator(String name, Floor currentFloor, ControlPanel controlPanel, int height, int speed) {
+    Elevator(String name,
+             Floor currentFloor,
+             ControlPanel controlPanel,
+             int height,
+             int speed,
+             int maximumWeight
+    ) {
         this.name = name;
         this.currentFloor = currentFloor;
         this.controlPanel = controlPanel;
         this.height = height;
         this.speed = speed;
+        this.maximumWeight = maximumWeight;
     }
 
     public void moveOneFloor(Direction direction) {
@@ -44,6 +53,9 @@ public class Elevator {
         }
         if (stopped) {
             throw new ElevatorException("Cannot move elevator while it's stopped");
+        }
+        if (isOverloaded()) {
+            throw new ElevatorException("Cannot move elevator while overloaded");
         }
         switch (direction) {
             case UP:
@@ -134,5 +146,9 @@ public class Elevator {
 
     public int getCurrentFloorNumber() {
         return getCurrentFloor().getFloorNumber();
+    }
+
+    public boolean isOverloaded() {
+        return this.peopleInside.stream().mapToInt(Person::getWeight).sum() > maximumWeight;
     }
 }

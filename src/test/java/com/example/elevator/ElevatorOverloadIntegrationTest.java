@@ -5,9 +5,9 @@ import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.Person;
 import com.example.elevator.domain.tasks.OptimizedTaskRegistry;
 import com.example.elevator.domain.tasks.SimpleTaskQueue;
-import com.example.elevator.service.SimpleCompositeProcessor;
 import com.example.elevator.service.ProcessRunner;
 import com.example.elevator.service.Processor;
+import com.example.elevator.service.SimpleCompositeProcessor;
 import com.example.elevator.service.elevator.AggregateElevatorController;
 import com.example.elevator.service.elevator.DefaultElevatorController;
 import com.example.elevator.service.elevator.ElevatorControllerComparator;
@@ -22,34 +22,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Tag("integration")
-class ElevatorIntegrationTest {
+public class ElevatorOverloadIntegrationTest {
     private static final int numberOfFloors = 10;
-    private static final int numberOfElevators = 2;
+    private static final int numberOfElevators = 1;
     private static final Set<PersonSpec> personSpecifications = new HashSet<>(Arrays.asList(
             new PersonSpec("Alice", 1, 4),
-            new PersonSpec("Bob", 3, 2),
-            new PersonSpec("Charlie", 4, 1),
-            new PersonSpec("Dan", 10, 1),
+            new PersonSpec("Bob", 1, 2),
+            new PersonSpec("Charlie", 1, 3),
+            new PersonSpec("Dan", 1, 7),
             new PersonSpec("Erin", 1, 10),
-            new PersonSpec("Faythe", 7, 9),
-            new PersonSpec("Grace", 4, 6),
-            new PersonSpec("Heidi", 3, 2),
+            new PersonSpec("Faythe", 1, 9),
+            new PersonSpec("Grace", 1, 6),
+            new PersonSpec("Heidi", 1, 5),
             new PersonSpec("Ivan", 1, 7),
-            new PersonSpec("Judy", 2, 8),
-            new PersonSpec("Mallory", 3, 9),
-            new PersonSpec("Niaj", 4, 3),
-            new PersonSpec("Olivia", 3, 2),
-            new PersonSpec("Peggy", 2, 1),
+            new PersonSpec("Judy", 1, 8),
+            new PersonSpec("Mallory", 1, 9),
+            new PersonSpec("Niaj", 1, 3),
+            new PersonSpec("Olivia", 1, 2),
+            new PersonSpec("Peggy", 1, 2),
             new PersonSpec("Rupert", 1, 2),
-            new PersonSpec("Sybil", 6, 10),
-            new PersonSpec("Trent", 9, 10),
-            new PersonSpec("Victor", 5, 10),
-            new PersonSpec("Walter", 9, 2),
-            new PersonSpec("Wendy", 8, 3)
+            new PersonSpec("Sybil", 1, 10),
+            new PersonSpec("Trent", 1, 10),
+            new PersonSpec("Victor", 1, 10),
+            new PersonSpec("Walter", 1, 2),
+            new PersonSpec("Wendy", 1, 3)
     ));
 
     @Test
-    void testShouldMovePeople() {
+    void testShouldMovePeopleEvenOverloaded() {
         Building building = Building.createBuildingWith(numberOfFloors, numberOfElevators, 700);
 
         List<Person> people = new ArrayList<>(personSpecifications.size());
@@ -71,6 +71,7 @@ class ElevatorIntegrationTest {
             compositeProcessor.addProcessor(
                     new CompositePersonController(person, aggregateElevatorController,
                             new EnterElevatorPersonController(person, aggregateElevatorController),
+                            new OverloadPreventionPersonController(person, aggregateElevatorController),
                             new PressFloorButtonPersonController(person, aggregateElevatorController),
                             new CallElevatorPersonController(person, aggregateElevatorController),
                             new LeaveElevatorPersonController(person, aggregateElevatorController)

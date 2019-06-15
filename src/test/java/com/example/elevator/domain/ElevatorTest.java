@@ -8,8 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ElevatorTest {
@@ -20,7 +19,10 @@ class ElevatorTest {
     ControlPanel controlPanel;
 
     @Mock
-    Person person;
+    Person person1;
+
+    @Mock
+    Person person2;
 
     @Mock
     Floor floor1;
@@ -37,7 +39,9 @@ class ElevatorTest {
         lenient().when(building.getNumberOfFloors()).thenReturn(2);
         lenient().when(building.getFloor(1)).thenReturn(floor1);
         lenient().when(building.getFloor(2)).thenReturn(floor2);
-        elevator = new Elevator("Elevator", floor1, controlPanel, 4, 1);
+        lenient().when(person1.getWeight()).thenReturn(70);
+        lenient().when(person2.getWeight()).thenReturn(100);
+        elevator = new Elevator("Elevator", floor1, controlPanel, 4, 1, 150);
     }
 
     //Happy paths
@@ -77,12 +81,12 @@ class ElevatorTest {
     void shouldAllowAPersonToEnterAndLeave() {
         assertTrue(elevator.getPeopleInside().isEmpty());
         elevator.openDoors();
-        elevator.enter(person);
+        elevator.enter(person1);
         elevator.closeDoors();
         assertEquals(1, elevator.getPeopleInside().size());
-        assertTrue(elevator.getPeopleInside().contains(person));
+        assertTrue(elevator.getPeopleInside().contains(person1));
         elevator.openDoors();
-        elevator.leave(person);
+        elevator.leave(person1);
         elevator.closeDoors();
         assertTrue(elevator.getPeopleInside().isEmpty());
     }
@@ -96,7 +100,20 @@ class ElevatorTest {
 
     @Test
     void shouldReturnCurrentFloorNumber() {
+        when(floor1.getFloorNumber()).thenReturn(12);
+        assertEquals(12, elevator.getCurrentFloorNumber());
     }
+
+    @Test
+    void shouldOverload() {
+        assertFalse(elevator.isOverloaded());
+        elevator.openDoors();
+        elevator.enter(person1);
+        assertFalse(elevator.isOverloaded());
+        elevator.enter(person2);
+        assertTrue(elevator.isOverloaded());
+    }
+
 
     //Exception paths
     @Test
@@ -126,12 +143,22 @@ class ElevatorTest {
     @Test
     void shouldThrowExceptionWhenTryingToMakePersonThatIsNotInTheElevatorToLeave() {
         elevator.openDoors();
-        assertThrows(ElevatorException.class, () -> elevator.leave(person));
+        assertThrows(ElevatorException.class, () -> elevator.leave(person1));
     }
 
     @Test
     void shouldThrowExceptionWhenTryingToMakePersonEnterOrLeaveWithClosedDoors() {
-        assertThrows(ElevatorException.class, () -> elevator.enter(person));
-        assertThrows(ElevatorException.class, () -> elevator.leave(person));
+        assertThrows(ElevatorException.class, () -> elevator.enter(person1));
+        assertThrows(ElevatorException.class, () -> elevator.leave(person1));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToMoveWhileOverloaded() {
+        elevator.setBuilding(building);
+        elevator.openDoors();
+        elevator.enter(person1);
+        elevator.enter(person2);
+        elevator.closeDoors();
+        assertThrows(ElevatorException.class, () -> elevator.moveOneFloor(Direction.UP));
     }
 }

@@ -22,10 +22,11 @@ class PersonTest {
         String name = "Lorem Ipsum";
         int desiredFloorNumber = 1;
         Person person = Person.createPersonOnFloorWithDesiredFloor(
-                name, desiredFloorNumber, floor);
+                name, 70, desiredFloorNumber, floor);
         assertNull(person.getElevator());
         assertEquals(floor, person.getCurrentFloor());
         assertEquals(name, person.getName());
+        assertEquals(70, person.getWeight());
         assertEquals(desiredFloorNumber, person.getDesiredFloorNumber());
         assertTrue(person.toString().contains(name));
         person.setElevator(elevator);
@@ -38,6 +39,7 @@ class PersonTest {
         person.setElevator(null);
         when(floor.getFloorNumber()).thenReturn(12);
         assertEquals(12, person.getCurrentFloorNumber());
+
     }
 
 }
