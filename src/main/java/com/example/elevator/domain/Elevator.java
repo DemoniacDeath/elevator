@@ -85,7 +85,7 @@ public class Elevator {
         peopleInside.add(person);
         person.setCurrentFloor(null);
         person.setElevator(this);
-        log.info(this + ": " + person + " entered on " + currentFloor.toString());
+        log.info(this + ": " + currentFloor + ": " + person + " entered");
     }
 
     public void leave(Person person) {
@@ -97,7 +97,7 @@ public class Elevator {
         }
         person.setCurrentFloor(currentFloor);
         person.setElevator(null);
-        log.info(this + ": " + person + " left on " + currentFloor.toString());
+        log.info(this + ": " + currentFloor + ": " + person + " left");
     }
 
     public void closeDoors() {
@@ -105,7 +105,7 @@ public class Elevator {
             return;
         }
         doorsOpen = false;
-        log.info(this + ": Doors closed on " + currentFloor.toString());
+        log.info(this + ": " + currentFloor + ": Doors closed");
     }
 
     public void openDoors() {
@@ -113,17 +113,17 @@ public class Elevator {
             return;
         }
         doorsOpen = true;
-        log.info(this + ": Doors opened on " + currentFloor.toString());
+        log.info(this + ": " + currentFloor + ": Doors opened");
     }
 
     public void stop() {
         stopped = true;
-        log.info(this + ": Stop command was received");
+        log.info(this + ": " + currentFloor + ": Stop command was received");
     }
 
     public void resume() {
         stopped = false;
-        log.info(this + ": Resume command was received");
+        log.info(this + ": " + currentFloor + ": Resume command was received");
     }
 
     boolean isStopped() {

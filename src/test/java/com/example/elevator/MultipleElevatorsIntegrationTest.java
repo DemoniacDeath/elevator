@@ -71,9 +71,9 @@ class MultipleElevatorsIntegrationTest {
             compositeProcessor.addProcessor(
                     new CompositePersonController(person, aggregateElevatorController,
                             new EnterElevatorPersonController(person, aggregateElevatorController),
+                            new CallElevatorPersonController(person, aggregateElevatorController),
                             new OverloadPreventionPersonController(person, aggregateElevatorController),
                             new PressFloorButtonPersonController(person, aggregateElevatorController),
-                            new CallElevatorPersonController(person, aggregateElevatorController),
                             new LeaveElevatorPersonController(person, aggregateElevatorController)
                     )
             );
