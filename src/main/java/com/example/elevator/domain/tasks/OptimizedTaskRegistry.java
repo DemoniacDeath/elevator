@@ -15,7 +15,7 @@ public class OptimizedTaskRegistry implements TaskRegistry {
     @Override
     public void register(Task task) {
         if (task instanceof MoveTask) {
-            moveTasks.add((MoveTask)task);
+            moveTasks.add((MoveTask) task);
         }
         if (task instanceof CallTask) {
             callTasks.add((CallTask) task);
@@ -26,13 +26,13 @@ public class OptimizedTaskRegistry implements TaskRegistry {
     public Set<Task> getTasksForFloorAndDirection(int currentFloor, Direction direction) {
         return Stream.concat(
                 callTasks.stream()
-                    .filter(t -> t.getFloorNumber() == currentFloor && (
-                            direction == null ||
-                                    t.getCallDirection() == null ||
-                                    t.getCallDirection() == direction
-                    )),
+                        .filter(t -> t.getFloorNumber() == currentFloor && (
+                                direction == null ||
+                                        t.getCallDirection() == null ||
+                                        t.getCallDirection() == direction
+                        )),
                 moveTasks.stream()
-                    .filter(t -> t.getFloorNumber() == currentFloor)
+                        .filter(t -> t.getFloorNumber() == currentFloor)
         )
                 .collect(Collectors.toSet());
     }
@@ -53,10 +53,10 @@ public class OptimizedTaskRegistry implements TaskRegistry {
     @Override
     public void accept(Task task) {
         if (task instanceof MoveTask) {
-            accept((MoveTask)task);
+            accept((MoveTask) task);
         }
         if (task instanceof CallTask) {
-            accept((CallTask)task);
+            accept((CallTask) task);
         }
     }
 

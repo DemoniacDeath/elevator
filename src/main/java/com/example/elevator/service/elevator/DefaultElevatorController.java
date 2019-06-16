@@ -41,7 +41,8 @@ public class DefaultElevatorController extends AbstractElevatorController implem
         log.info(getElevator() + ": Received a task: " + task.toString());
     }
 
-    private void acceptTask(Task task) {
+    @Override
+    public void acceptTask(Task task) {
         taskRegistry.accept(task);
         if (task instanceof MoveTask) {
             taskQueue.remove((MoveTask) task);
@@ -86,7 +87,11 @@ public class DefaultElevatorController extends AbstractElevatorController implem
 
         if (currentTask != null) {
             taskToProcess = currentTask;
-            Set<Task> tasks = getTasksForFloorAndDirection();
+            Set<Task> tasks = getTasksForFloorAndDirection(
+                    getElevator().getCurrentFloorNumber(), Direction.compareFloors(
+                            getElevator().getCurrentFloorNumber(), currentTask.getFloorNumber()
+                    )
+            );
             if (!tasks.isEmpty()) {
                 tasks.forEach(this::acceptTask);
                 taskToProcess = tasks.iterator().next();
@@ -95,11 +100,9 @@ public class DefaultElevatorController extends AbstractElevatorController implem
         return taskToProcess;
     }
 
-    private Set<Task> getTasksForFloorAndDirection() {
-        return taskRegistry.getTasksForFloorAndDirection(
-                getElevator().getCurrentFloorNumber(), Direction.compareFloors(
-                        getElevator().getCurrentFloorNumber(), currentTask.getFloorNumber()
-                ));
+    @Override
+    public Set<Task> getTasksForFloorAndDirection(int currentFloorNumber, Direction direction) {
+        return taskRegistry.getTasksForFloorAndDirection(currentFloorNumber, direction);
     }
 
     @Override

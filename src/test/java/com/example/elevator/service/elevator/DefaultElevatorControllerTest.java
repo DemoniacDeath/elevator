@@ -3,15 +3,16 @@ package com.example.elevator.service.elevator;
 import com.example.elevator.domain.Building;
 import com.example.elevator.domain.Direction;
 import com.example.elevator.domain.Elevator;
-import com.example.elevator.domain.Floor;
-import com.example.elevator.domain.tasks.*;
+import com.example.elevator.domain.tasks.CallTask;
+import com.example.elevator.domain.tasks.MoveTask;
+import com.example.elevator.domain.tasks.TaskQueue;
+import com.example.elevator.domain.tasks.TaskRegistry;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -62,8 +63,7 @@ class DefaultElevatorControllerTest {
         assertTrue(elevatorController.canContinue());
 
         when(elevator.getCurrentFloorNumber()).thenReturn(1);
-        when(elevator.getBuilding()).thenReturn(building);
-        when(building.getNumberOfFloors()).thenReturn(3);
+        when(elevator.getNumberOfFloors()).thenReturn(3);
         when(taskQueue.getNextTask()).thenReturn(moveTask);
         elevatorController.process();
         when(taskRegistry.isEmpty()).thenReturn(true);
@@ -74,8 +74,7 @@ class DefaultElevatorControllerTest {
 
     @Test
     void shouldProcess() {
-        when(building.getNumberOfFloors()).thenReturn(3);
-        when(elevator.getBuilding()).thenReturn(building);
+        when(elevator.getNumberOfFloors()).thenReturn(3);
         when(elevator.getCurrentFloorNumber()).thenReturn(1);
         when(taskRegistry.getAnyTaskFromFloor(1)).thenReturn(callTask);
 

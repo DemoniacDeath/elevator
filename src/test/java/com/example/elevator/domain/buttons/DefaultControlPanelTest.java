@@ -1,6 +1,5 @@
 package com.example.elevator.domain.buttons;
 
-import com.example.elevator.domain.Floor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,27 +12,23 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-class ControlPanelTest {
+class DefaultControlPanelTest {
     @Mock
-    Button stopButton;
+    ElevatorStopButton stopButton;
 
     @Mock
-    Button floor1Button;
+    ElevatorFloorButton floor1Button;
 
     @Mock
-    Button floor2Button;
+    ElevatorFloorButton floor2Button;
 
-    private Map<Integer, Button> floorButtons;
-
-    @Mock
-    Floor floor;
+    private Map<Integer, ElevatorFloorButton> floorButtons;
 
     @BeforeEach
-    void init () {
+    void init() {
         floorButtons = Stream.of(
                 new AbstractMap.SimpleImmutableEntry<>(1, floor1Button),
                 new AbstractMap.SimpleImmutableEntry<>(2, floor2Button)
@@ -42,23 +37,22 @@ class ControlPanelTest {
 
     @Test
     void shouldGetStopButton() {
-        ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
+        DefaultControlPanel controlPanel = new DefaultControlPanel(stopButton, floorButtons);
         Button stopButton = controlPanel.getStopButton();
         assertEquals(this.stopButton, stopButton);
     }
 
     @Test
     void shouldGetFloorButton() {
-        ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
+        DefaultControlPanel controlPanel = new DefaultControlPanel(stopButton, floorButtons);
         assertEquals(this.floor1Button, controlPanel.getFloorButton(1));
         assertEquals(this.floor2Button, controlPanel.getFloorButton(2));
     }
 
     @Test
     void shouldDepressButtons() {
-        ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
-        when(floor.getFloorNumber()).thenReturn(1);
-        controlPanel.depressButtonForFloor(floor);
+        DefaultControlPanel controlPanel = new DefaultControlPanel(stopButton, floorButtons);
+        controlPanel.depressButtonForFloor(1);
         Mockito.verify(floor1Button, Mockito.times(1)).depress();
     }
 }

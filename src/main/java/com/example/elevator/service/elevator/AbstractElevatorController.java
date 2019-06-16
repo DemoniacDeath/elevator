@@ -10,7 +10,7 @@ abstract class AbstractElevatorController {
         if (toFloorNumber < 1) {
             throw new ElevatorControllerException("Cannot go to floor number that is less than 1");
         }
-        if (toFloorNumber > getElevator().getBuilding().getNumberOfFloors()) {
+        if (toFloorNumber > getElevator().getNumberOfFloors()) {
             throw new ElevatorControllerException("Cannot go to floor number that is more than number of floors in the building");
         }
         Direction direction = Direction.compareFloors(getElevator().getCurrentFloorNumber(), toFloorNumber);

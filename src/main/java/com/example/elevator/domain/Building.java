@@ -19,7 +19,11 @@ public class Building {
         this.elevators.forEach(e -> e.setBuilding(this));
     }
 
-    public static Building createBuildingWith(int numberOfFloors, int numberOfElevators, int maximumWeight) {
+    static Building createBuildingWith(int numberOfFloors, int numberOfElevators, int maximumWeight) {
+        return createBuildingWith(numberOfFloors, numberOfElevators, maximumWeight, false);
+    }
+
+    public static Building createBuildingWith(int numberOfFloors, int numberOfElevators, int maximumWeight, boolean withVIP) {
         if (numberOfFloors < 1) {
             throw new BuildingException("Cannot create building with less than 1 floor");
         }
@@ -41,19 +45,23 @@ public class Building {
         }
         Set<Elevator> elevators = new HashSet<>(numberOfElevators);
         for (int i = 0; i < numberOfElevators; i++) {
-            Map<Integer, Button> floorButtons = new HashMap<>(numberOfFloors);
+            Map<Integer, ElevatorFloorButton> floorButtons = new HashMap<>(numberOfFloors);
             ElevatorStopButton stopButton = new ElevatorStopButton();
             for (int j = 1; j <= numberOfFloors; j++) {
-                floorButtons.put(j, new ElevatorFloorButton(j));
+                floorButtons.put(j, new DefaultElevatorFloorButton(j));
             }
-            ControlPanel controlPanel = new ControlPanel(stopButton, floorButtons);
+            ControlPanel controlPanel;
+            controlPanel = new DefaultControlPanel(stopButton, floorButtons);
+            if (withVIP) {
+                controlPanel = new ControlPanelVIPDecorator(controlPanel, new VIPControl());
+            }
             assert floors.keySet().contains(1);
             elevators.add(new Elevator("Elevator #" + i, floors.get(1), controlPanel, 4, 1, maximumWeight));
         }
         return new Building(floors, elevators);
     }
 
-    public int getNumberOfFloors() {
+    int getNumberOfFloors() {
         return floors.size();
     }
 

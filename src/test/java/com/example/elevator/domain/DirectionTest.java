@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,10 +28,10 @@ class DirectionTest {
     @Test
     void shouldCountFloorsFromCurrentInDirection() {
         assertEquals(
-                Arrays.asList(1,2,3,4,5),
+                Arrays.asList(1, 2, 3, 4, 5),
                 Direction.countFloorsFromCurrentInDirection(1, Direction.UP, 5));
         assertEquals(
-                Arrays.asList(5,4,3,2,1),
+                Arrays.asList(5, 4, 3, 2, 1),
                 Direction.countFloorsFromCurrentInDirection(5, Direction.DOWN, 5));
         assertEquals(
                 Collections.singletonList(1),
@@ -41,7 +40,7 @@ class DirectionTest {
                 Collections.singletonList(5),
                 Direction.countFloorsFromCurrentInDirection(5, Direction.UP, 5));
         assertEquals(
-                Arrays.asList(2,3),
+                Arrays.asList(2, 3),
                 Direction.countFloorsFromCurrentInDirection(2, Direction.UP, 3));
 
     }
@@ -49,11 +48,11 @@ class DirectionTest {
     @Test
     void shouldCountFloorsBetweenTwoFloors() {
         assertEquals(
-                Arrays.asList(1,2,3,4),
+                Arrays.asList(1, 2, 3, 4),
                 Direction.countFloorsBetweenTwoFloors(1, 5)
         );
         assertEquals(
-                Arrays.asList(5,4,3,2),
+                Arrays.asList(5, 4, 3, 2),
                 Direction.countFloorsBetweenTwoFloors(5, 1)
         );
         assertEquals(

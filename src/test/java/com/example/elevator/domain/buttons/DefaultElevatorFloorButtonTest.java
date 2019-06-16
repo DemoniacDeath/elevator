@@ -8,20 +8,21 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ElevatorFloorButtonTest {
+class DefaultElevatorFloorButtonTest {
     @Mock
     ElevatorController elevatorController;
 
     @Test
     void shouldBePressed() {
         int floorNumber = 99;
-        ElevatorFloorButton button = new ElevatorFloorButton(floorNumber);
+        DefaultElevatorFloorButton button = new DefaultElevatorFloorButton(floorNumber);
 
         assertEquals(floorNumber, button.getFloorNumber());
 

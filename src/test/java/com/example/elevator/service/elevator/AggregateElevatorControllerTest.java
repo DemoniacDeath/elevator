@@ -1,5 +1,6 @@
 package com.example.elevator.service.elevator;
 
+import com.example.elevator.domain.Direction;
 import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.tasks.Task;
 import com.example.elevator.service.SimpleCompositeProcessable;
@@ -10,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,6 +41,15 @@ class AggregateElevatorControllerTest {
 
     @Mock
     ElevatorControllerComparator comparator;
+
+    @Mock
+    Task task2;
+
+    @Mock
+    Task task3;
+
+    @Mock
+    Task task4;
 
     @Test
     void shouldAggregate() {
@@ -84,6 +95,27 @@ class AggregateElevatorControllerTest {
 
         elevatorController.addTask(task);
         verify(elevatorController2, times(1)).addTask(task);
+        clearInvocations(elevatorController2);
+
+        elevatorController.acceptTask(task);
+        verify(elevatorController1, times(1)).acceptTask(task);
+        verify(elevatorController2, times(1)).acceptTask(task);
+        clearInvocations(elevatorController1);
+        clearInvocations(elevatorController2);
+
+        when(elevatorController1.getTasksForFloorAndDirection(4, Direction.UP)).then(i -> Stream.of(
+                task, task2
+        ).collect(Collectors.toSet()));
+        when(elevatorController2.getTasksForFloorAndDirection(4, Direction.UP)).then(i -> Stream.of(
+                task3, task4
+        ).collect(Collectors.toSet()));
+        assertEquals(4, elevatorController.getTasksForFloorAndDirection(4, Direction.UP).size());
+        assertTrue(elevatorController.getTasksForFloorAndDirection(4, Direction.UP).containsAll(
+                Arrays.asList(task, task2, task3, task4)
+        ));
+
+        assertEquals(0, elevatorController.getTasksForFloorAndDirection(4, Direction.DOWN).size());
+        assertEquals(0, elevatorController.getTasksForFloorAndDirection(3, null).size());
 
 
     }

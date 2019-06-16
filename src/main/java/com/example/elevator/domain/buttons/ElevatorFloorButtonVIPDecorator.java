@@ -2,11 +2,13 @@ package com.example.elevator.domain.buttons;
 
 import com.example.elevator.domain.tasks.VIPMoveTask;
 import com.example.elevator.service.elevator.ElevatorController;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ElevatorFloorButtonVIPDecorator extends AbstractElevatorButton {
+public class ElevatorFloorButtonVIPDecorator extends AbstractElevatorButton implements ElevatorFloorButton {
     private final ElevatorFloorButton elevatorFloorButton;
+    @Getter
     private final VIPControl vipControl;
 
     @Override
@@ -16,13 +18,14 @@ public class ElevatorFloorButtonVIPDecorator extends AbstractElevatorButton {
                 elevatorController.addTask(new VIPMoveTask(elevatorFloorButton.getFloorNumber()));
                 setPressed();
             }
+            vipControl.deactivateVIPMode();
         } else {
             elevatorFloorButton.press(elevatorController);
         }
     }
 
     @Override
-    void setPressed() {
+    public void setPressed() {
         elevatorFloorButton.setPressed();
     }
 
@@ -34,5 +37,10 @@ public class ElevatorFloorButtonVIPDecorator extends AbstractElevatorButton {
     @Override
     public void depress() {
         elevatorFloorButton.depress();
+    }
+
+    @Override
+    public int getFloorNumber() {
+        return elevatorFloorButton.getFloorNumber();
     }
 }

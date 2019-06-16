@@ -4,9 +4,11 @@ import com.example.elevator.domain.Person;
 import com.example.elevator.service.Processable;
 import com.example.elevator.service.elevator.ElevatorController;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
-public abstract class AbstractPersonController implements Processable {
-    final Person person;
-    final ElevatorController elevatorController;
+abstract class AbstractPersonController implements Processable {
+    private final Person person;
+    private final ElevatorController elevatorController;
 }

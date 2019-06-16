@@ -3,13 +3,13 @@ package com.example.elevator.service.person;
 import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.Floor;
 import com.example.elevator.domain.Person;
-import com.example.elevator.service.elevator.ElevatorController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

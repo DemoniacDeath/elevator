@@ -1,5 +1,7 @@
 package com.example.elevator.domain;
 
+import com.example.elevator.domain.buttons.ControlPanelVIPDecorator;
+import com.example.elevator.domain.tasks.VIPMoveTask;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +21,14 @@ class BuildingTest {
             assertNotNull(building.getFloor(i));
             assertEquals(i, building.getFloor(i).getFloorNumber());
             assertNotNull(building.getFloor(i).getCallPanel());
+        }
+
+        for (Elevator elevator : building.getElevators()) {
+            assertFalse(elevator.getControlPanel() instanceof ControlPanelVIPDecorator);
+        }
+        building = Building.createBuildingWith(numberOfFloors, numberOfElevators, 150, true);
+        for (Elevator elevator : building.getElevators()) {
+            assertTrue(elevator.getControlPanel() instanceof ControlPanelVIPDecorator);
         }
     }
 

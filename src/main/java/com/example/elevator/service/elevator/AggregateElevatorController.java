@@ -1,5 +1,6 @@
 package com.example.elevator.service.elevator;
 
+import com.example.elevator.domain.Direction;
 import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.tasks.Task;
 import com.example.elevator.service.CompositeProcessable;
@@ -7,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
@@ -61,7 +64,19 @@ public class AggregateElevatorController implements ElevatorController, Composit
     }
 
     @Override
+    public void acceptTask(Task task) {
+        this.compositeProcessable.getProcessables().forEach(ec -> ec.acceptTask(task));
+    }
+
+    @Override
     public List<ElevatorController> getProcessables() {
         return compositeProcessable.getProcessables();
+    }
+
+    @Override
+    public Set<Task> getTasksForFloorAndDirection(int currentFloorNumber, Direction direction) {
+        return getProcessables().stream()
+                .flatMap(p -> p.getTasksForFloorAndDirection(currentFloorNumber, direction).stream())
+                .collect(Collectors.toSet());
     }
 }

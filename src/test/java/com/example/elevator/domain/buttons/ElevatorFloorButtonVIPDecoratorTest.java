@@ -14,7 +14,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ElevatorFloorButtonVIPDecoratorTest {
     @Mock
-    ElevatorFloorButton elevatorFloorButton;
+    DefaultElevatorFloorButton elevatorFloorButton;
 
     @Mock
     VIPControl vipControl;
@@ -25,7 +25,7 @@ class ElevatorFloorButtonVIPDecoratorTest {
     @Test
     void shouldDecorate() {
         ElevatorFloorButtonVIPDecorator elevatorFloorButtonVIPDecorator = new ElevatorFloorButtonVIPDecorator(
-            elevatorFloorButton, vipControl
+                elevatorFloorButton, vipControl
         );
 
         when(elevatorFloorButton.isNotPressed()).thenReturn(false);
@@ -40,6 +40,9 @@ class ElevatorFloorButtonVIPDecoratorTest {
         elevatorFloorButtonVIPDecorator.setPressed();
         verify(elevatorFloorButton, times(1)).setPressed();
         clearInvocations(elevatorFloorButton);
+
+        when(elevatorFloorButton.getFloorNumber()).thenReturn(12);
+        assertEquals(12, elevatorFloorButtonVIPDecorator.getFloorNumber());
     }
 
     @Test
@@ -60,14 +63,15 @@ class ElevatorFloorButtonVIPDecoratorTest {
         verify(elevatorController, times(1)).addTask(argThat(new VIPMoveTaskMatcher(
                 new VIPMoveTask(12)
         )));
+        verify(vipControl, times(1)).deactivateVIPMode();
         clearInvocations(elevatorController);
+        clearInvocations(vipControl);
 
         when(elevatorFloorButton.isNotPressed()).thenReturn(false);
         elevatorFloorButtonVIPDecorator.press(elevatorController);
         verify(elevatorController, never()).addTask(any());
         clearInvocations(elevatorController);
     }
-
 
 
     public static class VIPMoveTaskMatcher implements ArgumentMatcher<VIPMoveTask> {

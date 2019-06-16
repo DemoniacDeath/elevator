@@ -8,7 +8,6 @@ import lombok.extern.log4j.Log4j2;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Log4j2
 public class Elevator {
@@ -136,7 +135,7 @@ public class Elevator {
 
     public void depressFloorButton() {
         getCurrentFloor().depressCallButtons();
-        getControlPanel().depressButtonForFloor(getCurrentFloor());
+        getControlPanel().depressButtonForFloor(getCurrentFloorNumber());
     }
 
     @Override
@@ -150,5 +149,9 @@ public class Elevator {
 
     public boolean isOverloaded() {
         return this.peopleInside.stream().mapToInt(Person::getWeight).sum() > maximumWeight;
+    }
+
+    public int getNumberOfFloors() {
+        return getBuilding().getNumberOfFloors();
     }
 }

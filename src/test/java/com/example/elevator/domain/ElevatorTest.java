@@ -1,6 +1,6 @@
 package com.example.elevator.domain;
 
-import com.example.elevator.domain.buttons.ControlPanel;
+import com.example.elevator.domain.buttons.DefaultControlPanel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,7 @@ class ElevatorTest {
     Building building;
 
     @Mock
-    ControlPanel controlPanel;
+    DefaultControlPanel controlPanel;
 
     @Mock
     Person person1;
@@ -95,13 +95,20 @@ class ElevatorTest {
     void shouldDepressButtons() {
         elevator.depressFloorButton();
         verify(floor1).depressCallButtons();
-        verify(controlPanel).depressButtonForFloor(floor1);
+        verify(controlPanel).depressButtonForFloor(1);
     }
 
     @Test
     void shouldReturnCurrentFloorNumber() {
         when(floor1.getFloorNumber()).thenReturn(12);
         assertEquals(12, elevator.getCurrentFloorNumber());
+    }
+
+    @Test
+    void shouldReturnNumberOfFloors() {
+        elevator.setBuilding(building);
+        when(building.getNumberOfFloors()).thenReturn(12);
+        assertEquals(12, elevator.getNumberOfFloors());
     }
 
     @Test

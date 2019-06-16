@@ -5,21 +5,21 @@ import com.example.elevator.domain.buttons.Button;
 import com.example.elevator.service.elevator.ElevatorController;
 
 public class PressFloorButtonPersonController extends AbstractPersonController {
-    public PressFloorButtonPersonController(Person person, ElevatorController elevatorController) {
+    PressFloorButtonPersonController(Person person, ElevatorController elevatorController) {
         super(person, elevatorController);
     }
 
     @Override
     public boolean canContinue() {
-        return person.getCurrentFloor() == null && person.getElevator() != null &&
-                person.getElevator().getCurrentFloorNumber() != person.getDesiredFloorNumber();
+        return getPerson().getCurrentFloor() == null && getPerson().getElevator() != null &&
+                getPerson().getElevator().getCurrentFloorNumber() != getPerson().getDesiredFloorNumber();
     }
 
     @Override
     public void process() {
-        Button button = person.getElevator().getControlPanel().getFloorButton(person.getDesiredFloorNumber());
+        Button button = getPerson().getElevator().getControlPanel().getFloorButton(getPerson().getDesiredFloorNumber());
         if (button != null && button.isNotPressed()) {
-            button.press(elevatorController.getElevatorControllerFor(person.getElevator()));
+            button.press(getElevatorController().getElevatorControllerFor(getPerson().getElevator()));
         }
     }
 }

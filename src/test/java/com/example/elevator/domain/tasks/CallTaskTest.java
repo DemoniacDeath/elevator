@@ -3,7 +3,7 @@ package com.example.elevator.domain.tasks;
 import com.example.elevator.domain.Direction;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CallTaskTest {
     @Test

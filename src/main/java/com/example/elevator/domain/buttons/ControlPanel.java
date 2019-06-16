@@ -1,28 +1,9 @@
 package com.example.elevator.domain.buttons;
 
-import com.example.elevator.domain.Floor;
+public interface ControlPanel {
+    ElevatorStopButton getStopButton();
 
-import java.util.HashMap;
-import java.util.Map;
+    ElevatorFloorButton getFloorButton(int floor);
 
-public class ControlPanel {
-    private final Button stopButton;
-    private final Map<Integer, Button> floorButtons = new HashMap<>();
-
-    public ControlPanel(Button stopButton, Map<Integer, Button> floorButtons) {
-        this.stopButton = stopButton;
-        this.floorButtons.putAll(floorButtons);
-    }
-
-    Button getStopButton() {
-        return stopButton;
-    }
-
-    public Button getFloorButton(int floor) {
-        return floorButtons.get(floor);
-    }
-
-    public void depressButtonForFloor(Floor currentFloor) {
-        getFloorButton(currentFloor.getFloorNumber()).depress();
-    }
+    void depressButtonForFloor(int currentFloor);
 }

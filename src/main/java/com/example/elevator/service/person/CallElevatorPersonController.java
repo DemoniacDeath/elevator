@@ -8,22 +8,22 @@ import static com.example.elevator.domain.Direction.compareFloors;
 
 public class CallElevatorPersonController extends AbstractPersonController {
 
-    public CallElevatorPersonController(Person person, ElevatorController elevatorController) {
+    CallElevatorPersonController(Person person, ElevatorController elevatorController) {
         super(person, elevatorController);
     }
 
     @Override
     public boolean canContinue() {
-        return person.getCurrentFloor() != null && person.getElevator() == null;
+        return getPerson().getCurrentFloor() != null && getPerson().getElevator() == null;
     }
 
     @Override
     public void process() {
-        Button button = person.getCurrentFloor().getCallButtonForDirection(
-                compareFloors(person.getCurrentFloorNumber(), person.getDesiredFloorNumber())
+        Button button = getPerson().getCurrentFloor().getCallButtonForDirection(
+                compareFloors(getPerson().getCurrentFloorNumber(), getPerson().getDesiredFloorNumber())
         );
         if (button != null && button.isNotPressed()) {
-            button.press(elevatorController);
+            button.press(getElevatorController());
         }
     }
 }

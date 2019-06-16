@@ -34,8 +34,8 @@ class CompositePersonControllerTest {
                 person, elevatorController, personController1, personController2
         );
 
-        assertEquals(person, personController.person);
-        assertEquals(elevatorController, personController.elevatorController);
+        assertEquals(person, personController.getPerson());
+        assertEquals(elevatorController, personController.getElevatorController());
 
     }
 
@@ -44,10 +44,10 @@ class CompositePersonControllerTest {
         CompositePersonController personController = CompositePersonController.createDefaultPersonController(elevatorController, person);
         assertTrue(personController.getControllers().stream()
                 .allMatch(pc ->
-                                pc instanceof EnterElevatorPersonController ||
+                        pc instanceof EnterElevatorPersonController ||
                                 pc instanceof CallElevatorPersonController ||
                                 pc instanceof OverloadPreventionPersonController ||
-                                pc instanceof PressFloorButtonPersonController ||
+                                pc instanceof PressFloorButtonPersonControllerVIPDecorator ||
                                 pc instanceof LeaveElevatorPersonController
                 )
         );
