@@ -22,7 +22,7 @@ class ElevatorControllerVIPDecoratorTest {
     @Mock
     Elevator elevator;
     @Mock
-    TaskQueue vipTaskQueue;
+    TaskQueue<VIPMoveTask> vipTaskQueue;
     @Mock
     MoveTask moveTask;
     @Mock

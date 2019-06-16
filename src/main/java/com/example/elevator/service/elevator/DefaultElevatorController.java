@@ -6,13 +6,15 @@ import com.example.elevator.domain.tasks.MoveTask;
 import com.example.elevator.domain.tasks.Task;
 import com.example.elevator.domain.tasks.TaskQueue;
 import com.example.elevator.domain.tasks.TaskRegistry;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Set;
 import java.util.stream.Stream;
 
 @Log4j2
-public class DefaultElevatorController implements ElevatorController {
+public class DefaultElevatorController extends AbstractElevatorController implements ElevatorController {
+    @Getter
     private final Elevator elevator;
 
     private final TaskQueue<MoveTask> taskQueue;
@@ -27,7 +29,7 @@ public class DefaultElevatorController implements ElevatorController {
 
     @Override
     public Stream<Elevator> getElevators() {
-        return Stream.of(elevator);
+        return Stream.of(getElevator());
     }
 
     @Override
@@ -36,7 +38,7 @@ public class DefaultElevatorController implements ElevatorController {
         if (task instanceof MoveTask) {
             taskQueue.addTask((MoveTask) task);
         }
-        log.info(elevator + ": Received a task: " + task.toString());
+        log.info(getElevator() + ": Received a task: " + task.toString());
     }
 
     private void acceptTask(Task task) {
@@ -53,14 +55,14 @@ public class DefaultElevatorController implements ElevatorController {
 
     @Override
     public void process() {
-        elevator.closeDoors();
+        getElevator().closeDoors();
 
         if (currentTask == null) {
             currentTask = taskQueue.getNextTask();
             if (currentTask != null) {
                 this.acceptTask(currentTask);
             } else {
-                currentTask = taskRegistry.getAnyTaskFromFloor(elevator.getCurrentFloorNumber());
+                currentTask = taskRegistry.getAnyTaskFromFloor(getElevator().getCurrentFloorNumber());
                 this.acceptTask(currentTask);
             }
         }
@@ -68,11 +70,11 @@ public class DefaultElevatorController implements ElevatorController {
         Task taskToProcess = getTask();
 
         if (taskToProcess != null) {
-            if (!taskToProcess.isComplete(elevator)) {
+            if (!taskToProcess.isComplete(getElevator())) {
                 moveElevatorTowardsFloor(taskToProcess.getFloorNumber());
             } else {
                 processTaskCompletionOnCurrentFloor();
-                if (currentTask.isComplete(elevator)) {
+                if (currentTask.isComplete(getElevator())) {
                     currentTask = null;
                 }
             }
@@ -95,25 +97,9 @@ public class DefaultElevatorController implements ElevatorController {
 
     private Set<Task> getTasksForFloorAndDirection() {
         return taskRegistry.getTasksForFloorAndDirection(
-                elevator.getCurrentFloorNumber(), Direction.compareFloors(
-                        elevator.getCurrentFloorNumber(), currentTask.getFloorNumber()
+                getElevator().getCurrentFloorNumber(), Direction.compareFloors(
+                        getElevator().getCurrentFloorNumber(), currentTask.getFloorNumber()
                 ));
-    }
-
-    private void moveElevatorTowardsFloor(int toFloorNumber) {
-        if (toFloorNumber < 1) {
-            throw new ElevatorControllerException("Cannot go to floor number that is less than 1");
-        }
-        if (toFloorNumber > elevator.getBuilding().getNumberOfFloors()) {
-            throw new ElevatorControllerException("Cannot go to floor number that is more than number of floors in the building");
-        }
-        Direction direction = Direction.compareFloors(elevator.getCurrentFloorNumber(), toFloorNumber);
-        elevator.moveOneFloor(direction);
-    }
-
-    private void processTaskCompletionOnCurrentFloor() {
-        elevator.openDoors();
-        elevator.depressFloorButton();
     }
 
     @Override
@@ -123,7 +109,7 @@ public class DefaultElevatorController implements ElevatorController {
 
     @Override
     public ElevatorController getElevatorControllerFor(Elevator elevator) {
-        if (this.elevator == elevator) {
+        if (this.getElevator() == elevator) {
             return this;
         }
         return null;

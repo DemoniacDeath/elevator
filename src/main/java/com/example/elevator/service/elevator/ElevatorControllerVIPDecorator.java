@@ -3,15 +3,25 @@ package com.example.elevator.service.elevator;
 import com.example.elevator.domain.Elevator;
 import com.example.elevator.domain.tasks.Task;
 import com.example.elevator.domain.tasks.TaskQueue;
+import com.example.elevator.domain.tasks.VIPMoveTask;
 import lombok.RequiredArgsConstructor;
 
 import java.util.stream.Stream;
 
-@RequiredArgsConstructor
-public class ElevatorControllerVIPDecorator implements ElevatorController {
+public class ElevatorControllerVIPDecorator extends AbstractElevatorController implements ElevatorController {
     private final ElevatorController elevatorController;
-    private final TaskQueue vipTaskQueue;
+    private final TaskQueue<VIPMoveTask> vipTaskQueue;
     private Task currentVIPTask = null;
+
+    ElevatorControllerVIPDecorator(ElevatorController elevatorController, TaskQueue<VIPMoveTask> vipTaskQueue) {
+        this.elevatorController = elevatorController;
+        this.vipTaskQueue = vipTaskQueue;
+    }
+
+    @Override
+    Elevator getElevator() {
+        return elevatorController.getElevators().findFirst().orElse(null);
+    }
 
     @Override
     public void addTask(Task task) {
