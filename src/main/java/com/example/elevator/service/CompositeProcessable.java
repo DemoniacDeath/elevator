@@ -2,7 +2,7 @@ package com.example.elevator.service;
 
 import java.util.List;
 
-public interface CompositeProcessable<T> extends Processable {
+public interface CompositeProcessable<T extends Processable> extends Processable {
     void addProcessable(T processable);
 
     List<T> getProcessables();
