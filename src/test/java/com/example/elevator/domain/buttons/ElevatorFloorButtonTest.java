@@ -23,6 +23,8 @@ class ElevatorFloorButtonTest {
         int floorNumber = 99;
         ElevatorFloorButton button = new ElevatorFloorButton(floorNumber);
 
+        assertEquals(floorNumber, button.getFloorNumber());
+
         button.press(elevatorController);
         verify(elevatorController, times(1)).addTask(argThat(new MoveTaskMatcher(new MoveTask(
                 floorNumber
