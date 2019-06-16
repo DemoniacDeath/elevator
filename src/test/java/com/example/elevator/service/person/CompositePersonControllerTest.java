@@ -38,6 +38,21 @@ class CompositePersonControllerTest {
         assertEquals(elevatorController, personController.elevatorController);
 
     }
+
+    @Test
+    void shouldCreateDefaultPersonController() {
+        CompositePersonController personController = CompositePersonController.createDefaultPersonController(elevatorController, person);
+        assertTrue(personController.getControllers().stream()
+                .allMatch(pc ->
+                                pc instanceof EnterElevatorPersonController ||
+                                pc instanceof CallElevatorPersonController ||
+                                pc instanceof OverloadPreventionPersonController ||
+                                pc instanceof PressFloorButtonPersonController ||
+                                pc instanceof LeaveElevatorPersonController
+                )
+        );
+    }
+
     @Test
     void shouldCheckForContinuation() {
         CompositePersonController personController = new CompositePersonController(

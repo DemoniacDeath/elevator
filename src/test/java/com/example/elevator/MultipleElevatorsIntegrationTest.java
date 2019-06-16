@@ -60,7 +60,8 @@ class MultipleElevatorsIntegrationTest {
         }
 
         SimpleCompositeProcessable<Processable> compositeProcessable = new SimpleCompositeProcessable<>();
-        AggregateElevatorController aggregateElevatorController = new AggregateElevatorController(new SimpleCompositeProcessable<>(), new ElevatorControllerComparator());
+        AggregateElevatorController aggregateElevatorController = new AggregateElevatorController(
+                new SimpleCompositeProcessable<>(), new ElevatorControllerComparator());
         for (Elevator elevator : building.getElevators()) {
             aggregateElevatorController.addProcessable(new DefaultElevatorController(
                     new SimpleTaskQueue<>(), new OptimizedTaskRegistry(), elevator));
@@ -69,13 +70,7 @@ class MultipleElevatorsIntegrationTest {
         compositeProcessable.addProcessable(aggregateElevatorController);
         for (Person person : people) {
             compositeProcessable.addProcessable(
-                    new CompositePersonController(person, aggregateElevatorController,
-                            new EnterElevatorPersonController(person, aggregateElevatorController),
-                            new CallElevatorPersonController(person, aggregateElevatorController),
-                            new OverloadPreventionPersonController(person, aggregateElevatorController),
-                            new PressFloorButtonPersonController(person, aggregateElevatorController),
-                            new LeaveElevatorPersonController(person, aggregateElevatorController)
-                    )
+                    CompositePersonController.createDefaultPersonController(aggregateElevatorController, person)
             );
         }
         ProcessRunner.run(compositeProcessable, 1000);

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Tag("integration")
-public class ElevatorIntegrationTest {
+class ElevatorIntegrationTest {
     private static final int numberOfFloors = 10;
     private static final int numberOfElevators = 1;
     private static final Set<PersonSpec> personSpecifications = new HashSet<>(Arrays.asList(
@@ -69,13 +69,7 @@ public class ElevatorIntegrationTest {
         compositeProcessable.addProcessable(aggregateElevatorController);
         for (Person person : people) {
             compositeProcessable.addProcessable(
-                    new CompositePersonController(person, aggregateElevatorController,
-                            new EnterElevatorPersonController(person, aggregateElevatorController),
-                            new CallElevatorPersonController(person, aggregateElevatorController),
-                            new OverloadPreventionPersonController(person, aggregateElevatorController),
-                            new PressFloorButtonPersonController(person, aggregateElevatorController),
-                            new LeaveElevatorPersonController(person, aggregateElevatorController)
-                    )
+                    CompositePersonController.createDefaultPersonController(aggregateElevatorController, person)
             );
         }
         ProcessRunner.run(compositeProcessable, 1000);
@@ -84,6 +78,7 @@ public class ElevatorIntegrationTest {
             assertEquals(ps.desiredFloorNumber, ps.person.getCurrentFloorNumber());
         }
     }
+
     @RequiredArgsConstructor
     private static class PersonSpec {
         final String name;
