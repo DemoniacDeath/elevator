@@ -15,7 +15,8 @@ public class ElevatorControllerVIPDecorator implements ElevatorController {
 
     @Override
     public void addTask(Task task) {
-        elevatorController.addTask(task);
+        //TODO add decoration logic here
+//        elevatorController.addTask(task);
     }
 
     @Override
@@ -38,11 +39,14 @@ public class ElevatorControllerVIPDecorator implements ElevatorController {
 
     @Override
     public boolean canContinue() {
-        return elevatorController.canContinue();
+        //TODO add decoration logic here
+//        return elevatorController.canContinue();
+        return false;
     }
 
     @Override
     public void process() {
-        elevatorController.process();
+        //TODO add decoration logic here
+//        elevatorController.process();
     }
 }

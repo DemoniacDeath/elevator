@@ -43,6 +43,9 @@ class ElevatorControllerVIPDecoratorTest {
 
         when(elevatorController.getElevatorControllerFor(elevator)).thenReturn(null);
         assertNull(elevatorControllerVIPDecorator.getElevatorControllerFor(elevator));
+
+        when(elevatorController.getNumberOfTasks()).thenReturn(5);
+        assertEquals(5, elevatorControllerVIPDecorator.getNumberOfTasks());
     }
 
     @Test
